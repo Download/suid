@@ -10,8 +10,8 @@ Suids are IDs that are:
 * 53 bits so they fit into a single Javascript or PHP Number, Java Long, Int64 etc.
 
 ## Download
-Commented (~7kB)
-Minified (~3 KB)
+* [Commented (~7kB)](https://github.com/Download/suid/releases/download/0.9.0/suid.js)
+* [Minified (~3 KB)](https://github.com/Download/suid/releases/download/0.9.0/suid.min.js)
 
 ## Usage
 * Install suid.js on your server
@@ -21,9 +21,24 @@ Minified (~3 KB)
 
 Example:
 
-    <script src="lib/suid/suid.js" data-suid-server="suid/suid.json" data-suid-options="{'min':2, 'max':4}"></script>
+    <script src="lib/suid/suid.js" data-suid-server="suid/suid.json" data-suid-options="{'min':3, 'max':3}"></script>
 
-Need a server? Check out the Java EE implementation: [suid-server-java](https://github.com/Download/suid-server-java)
+*Need a server?* 
+Check out the Java EE implementation: [suid-server-java](https://github.com/Download/suid-server-java)
+
+## Options
+The suid script fetches suid blocks from the suid server and stores them in a pool in [localStorage](http://www.w3.org/TR/webstorage/#storage) ([browser support](http://caniuse.com/#search=localstorage)). This pool is accessible from all tabs that are from the same domain, maximizing the efficient use of suid blocks. 
+
+You can control the behaviour of the pool with two settings:
+  
+* `min`: Minimum number of suid blocks to keep in the pool, defaults to 2
+* `max`: Maximum number of suid blocks to keep in the pool, defaults to 2
+
+Option `min` determines how low the amount of blocks in the pool may become before the script will request new blocks from the server. Option `max` determines how many blocks the script will fetch during each request in order to fill the
+pool up again. If your application has moments in which it consumes a lot of IDs in a short timeframe, or if your application is expected to be used offline for prolonged periods, choose a `min` that ensures enough IDs will always
+be in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks (at the expense of more ID blocks going wasted when caches are cleared etc) choose a `max` that is a number of blocks higher then your `min`.
+
+At most 8 blocks can be requested from the pool simultaneously so bear this in mind when configuring your pool. I would guess that the default settings are good enough for most people.
 
 ## License
 Creative Commons Attribution 4.0 International (CC BY 4.0)
