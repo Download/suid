@@ -1,6 +1,6 @@
 # suid v0.9.2
 Distributed Service-Unique IDs that are short and sweet.
-[http://download.github.io/suid/](project website)
+[project website](http://download.github.io/suid/)
 
 Suids are IDs that are:
 
