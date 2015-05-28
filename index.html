@@ -59,6 +59,7 @@
 <li>Include it on your webpage</li>
 <li>Configure the URL to the suid server using the <code>data-suid-server</code> attribute</li>
 <li>Pass options to it using the <code>data-suid-options</code> attribute</li>
+<li>Call <code>Suid()</code> to generate IDs</li>
 </ul>
 
 <h2>
@@ -68,6 +69,19 @@
         data-suid-server="suid/suid.json"
         data-suid-options="{'min':3, 'max':3}"&gt;&lt;/script&gt;
 </code></pre>
+
+<p>Later on:</p>
+
+<pre><code>var myId = Suid();
+alert(myId);             // 14shd
+alert(myId.valueOf());   // 1204748
+var halve = myId / 2;
+var halveId = new Suid(halve);
+alert(halve);            // 602374
+alert(halveId);          // jd86
+</code></pre>
+
+<p><em>Don't create new IDs by adding to existing IDs! Just call <code>Suid()</code> again.</em></p>
 
 <h2>
 <a id="need-a-server" class="anchor" href="#need-a-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Need a server?</h2>
