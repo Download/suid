@@ -426,12 +426,12 @@
 
 	function getOptions() {
 		var options = {};
-		var script = document.querySelector('script[data-suid-url]');
+		var script = document.querySelector('script[data-suid-server]');
 		if (! script) {
-			if (log) {console.error('Attribute `data-suid-url` not found on any script element. Unable to fetch suids from the server.');}
+			if (log) {console.error('Attribute `data-suid-server` not found on any script element. Unable to fetch suids from the server.');}
 			return options;
 		}
-		var url = script.getAttribute('data-suid-url'),
+		var url = script.getAttribute('data-suid-server'),
 			attr = script.getAttribute('data-suid-options');
 		
 		if (attr) {
