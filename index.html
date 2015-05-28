@@ -48,16 +48,21 @@
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
-<li><a href="https://github.com/Download/suid/releases/download/0.9.0/suid.js">Commented (~7kB)</a></li>
-<li><a href="https://github.com/Download/suid/releases/download/0.9.0/suid.min.js">Minified (~3 KB)</a></li>
+<li><a href="https://github.com/Download/suid/releases/download/0.9.1/suid.js">Commented (~7kB)</a></li>
+<li><a href="https://github.com/Download/suid/releases/download/0.9.1/suid.min.js">Minified (~3 KB)</a></li>
 </ul>
+
+<h2>
+<a id="cdn" class="anchor" href="#cdn" aria-hidden="true"><span class="octicon octicon-link"></span></a>CDN</h2>
+
+<pre><code>//cdn.rawgit.com/download/suid/0.9.1/dist/suid.min.js
+</code></pre>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <ul>
-<li>Install suid.js on your server</li>
-<li>Include it on your webpage</li>
+<li>Include suid.js on your webpage</li>
 <li>Configure the URL to the suid server using the <code>data-suid-server</code> attribute</li>
 <li>Pass options to it using the <code>data-suid-options</code> attribute</li>
 <li>Call <code>Suid()</code> to generate IDs</li>
@@ -66,7 +71,7 @@
 <h2>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
 
-<pre><code>&lt;script src="lib/suid/suid.js" 
+<pre><code>&lt;script src="//cdn.rawgit.com/download/suid/0.9.1/dist/suid.min.js" 
         data-suid-server="suid/suid.json"
         data-suid-options="{'min':3, 'max':3}"&gt;&lt;/script&gt;
 </code></pre>
@@ -108,6 +113,11 @@ pool up again. If your application has moments in which it consumes a lot of IDs
 be in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks (at the expense of more ID blocks going wasted when caches are cleared etc) choose a <code>max</code> that is a number of blocks higher then your <code>min</code>.</p>
 
 <p>At most 8 blocks can be requested from the pool simultaneously so bear this in mind when configuring your pool. I would guess that the default settings are good enough for most people.</p>
+
+<h2>
+<a id="api-documentation" class="anchor" href="#api-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>API documentation</h2>
+
+<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.9.1/doc/index.html">generated documentation</a>.</p>
 
 <h2>
 <a id="why-suids" class="anchor" href="#why-suids" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Suids?</h2>
