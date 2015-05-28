@@ -7,7 +7,7 @@ Suids are IDs that are:
 * Unique across a service or site
 * Short
 * Ordered
-* Human readable, write-able and pronouncable
+* Easy for humans to read, write and pronounce
 * 53 bits so they fit into a single Javascript or PHP Number, Java Long, Int64 etc.
 
 ## Download
@@ -60,7 +60,7 @@ At most 8 blocks can be requested from the pool simultaneously so bear this in m
 
 ## API documentation
 	
-Please refer to the [generated documentation](https://cdn.rawgit.com/download/suid/0.9.2/doc/index.html).
+Please refer to the [generated documentation](https://cdn.rawgit.com/download/suid/0.9.2/doc/suid.Suid.html).
 	
 
 ## Why Suids?
