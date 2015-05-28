@@ -1,4 +1,4 @@
-# suid v0.9.3
+# suid v0.9.4
 Distributed Service-Unique IDs that are short and sweet.
 [project website](http://download.github.io/suid/)
 
@@ -11,11 +11,11 @@ Suids are IDs that are:
 * 53 bits so they fit into a single Javascript or PHP Number, Java Long, Int64 etc.
 
 ## Download
-* [Commented (~7kB)](https://github.com/Download/suid/releases/download/0.9.3/suid.js)
-* [Minified (~3 KB)](https://github.com/Download/suid/releases/download/0.9.3/suid.min.js)
+* [Commented (~7kB)](https://github.com/Download/suid/releases/download/0.9.4/suid.js)
+* [Minified (~3 KB)](https://github.com/Download/suid/releases/download/0.9.4/suid.min.js)
 
 ## CDN
-	//cdn.rawgit.com/download/suid/0.9.3/dist/suid.min.js
+	//cdn.rawgit.com/download/suid/0.9.4/dist/suid.min.js
 
 ## Usage
 * Include suid.js on your webpage
@@ -25,7 +25,7 @@ Suids are IDs that are:
 
 ## Example
 
-	<script src="//cdn.rawgit.com/download/suid/0.9.3/dist/suid.min.js" 
+	<script src="//cdn.rawgit.com/download/suid/0.9.4/dist/suid.min.js" 
 			data-suid-server="suid/suid.json"
 			data-suid-options="{'min':3, 'max':3}"></script>
 
@@ -60,7 +60,7 @@ At most 8 blocks can be requested from the pool simultaneously so bear this in m
 
 ## API documentation
 	
-Please refer to the [generated documentation](https://cdn.rawgit.com/download/suid/0.9.3/doc/suid.Suid.html).
+Please refer to the [generated documentation](https://cdn.rawgit.com/download/suid/0.9.4/doc/suid.Suid.html).
 	
 
 ## Why Suids?
