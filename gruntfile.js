@@ -43,6 +43,17 @@ module.exports = function(grunt) {
 			}
 		},
 
+		jsdoc : {
+			dist : {
+				src: ['src/*.js', 'test/*.js'],
+				options: {
+					destination: 'doc',
+					template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
+					configure: "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+				}
+			}
+		},
+		
 		// watch it live
 		watch: {
 			js: {
@@ -58,22 +69,24 @@ module.exports = function(grunt) {
 	} ); // end init config
 
 	/**
-	 * Default task
+	 * Default tasks
 	 */
 	grunt.registerTask( 'default', [
 		'jshint',
 		'uglify',
+		'jsdoc',
 		'notify:dist'
 	] );
 
 	/**
-	 * Dev task
+	 * Dev tasks
 	 *
 	 * The main tasks for development
 	 */
 	grunt.registerTask( 'dev', [
 		'jshint',
 		'uglify',
+		'jsdoc',
 		'watch'
 	] );
 };
