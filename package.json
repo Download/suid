@@ -20,6 +20,6 @@
     "grunt-contrib-uglify": "~0.6.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-notify": "~0.3.1",
-    "grunt-jsdoc": "~0.6.6"
+    "grunt-jsdoc": "~0.6.7"
   }
 }
