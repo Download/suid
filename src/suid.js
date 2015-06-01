@@ -3,12 +3,11 @@
  * 
  * http://download.github.io/suid
  * 
- * @Author Stijn de Witt
+ * @Author Stijn de Witt (http://StijnDeWitt.com)
  * @Copyright (c) 2015. Some rights reserved. 
  * @License CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) 
  */
 /* jshint browser:true, shadow:true, devel:true */
-
 /** @namespace suid */
 (function(){
 	'use strict';
@@ -84,7 +83,9 @@
 		function Suid(value) {
 			if (this instanceof Suid) {
 				// Constructor invocation
-				Number.call(this, this.value = (typeof value === 'string' ? Suid.fromString(value) : value));
+				this.value = (typeof value === 'string' ? 
+						Suid.fromString(value).value : (value instanceof Suid ? value.value : value));
+				Number.call(this, this.value);
 			} else {
 				// Direct invocation
 				return next();
@@ -148,7 +149,7 @@
 		 * @param str The (possibly compressed) base-32 string.
 		 * @return The newly created suid.
 		 * 
-		 * @memberof! suid.Suid#
+		 * @memberof! suid.Suid
 		 * @see suid.Suid.fromBase32
 		 * @see suid.Suid.decompress
 		 */
@@ -162,7 +163,7 @@
 		 * @param str The uncompressed base-32 string.
 		 * @return The newly created suid.
 		 * 
-		 * @memberof! suid.Suid#
+		 * @memberof! suid.Suid
 		 * @see suid.Suid.fromString
 		 * @see suid.Suid.decompress
 		 */

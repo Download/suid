@@ -31,11 +31,13 @@ module.exports = function(grunt) {
 
 		// minify JS
 		uglify: {
-
 			options:{
-				banner : '/*! Suid <%= version %> | Stijn de Witt StijnDeWitt.com | CC0 1.0 Universal License | github.com/Download/suid */\n'
+				banner : '/*! [Suid <%= version %>](http://download.github.io/suid) copyright 2015 by [Stijn de Witt](http://StijnDeWitt.com), some rights reserved. Licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) */',
+				mangle: {
+					except: 'Suid'
+				},
+				sourceMap: true
 			},
-
 			admin: {
 				files: {
 					'dist/suid.min.js': [ 'src/suid.js']
