@@ -27,14 +27,14 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="suid.html">suid</a></li>
+					<li><a href="ws.suid.html">ws.suid</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="suid.Suid.html">suid.Suid</a></li>
+					<li><a href="ws.suid.Suid.html">ws.suid.Suid</a></li>
 				</ul>
 			</li>
 			
@@ -60,7 +60,7 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="suid.html">suid</a>.</span>
+            <span class="ancestors"><a href="ws.suid.html">.suid</a>.</span>
         
         Suid
         </h2>
@@ -82,24 +82,31 @@
     
     
     <div class="description">
-        <p>When called as a regular function, generates a new Suid. 
-Any arguments will be ignored.</p>
+        <p>Distributed Service-Unique IDs that are short and sweet.</p>
+<p>When called without arguments, generates a new Suid.</p> 
 
-<p>When called as a constructor, constructs a new Suid based
-on the given value, which may be either a Number, or a 
-(possibly compressed) Base32 String using suid's 
-<a href="suid.html#.ALPHABET">suid.ALPHABET</a>.</p>
+<p>When called with an argument, constructs a new Suid based
+on the given value, which may be either a:</p>
+
+<ul>
+  <li>Number</li>
+  <li>(possibly compressed) Base32 String</li>
+</ul>
 
 <p><b>Examples</b></p>
 
 <big><pre>
-// call as regular function to get the next id
-var id = Suid();
+// call without arguments to get the next id
+var id1 = Suid();  // or,
+var id2 = new Suid();
+// this is equivalent to
+var id3 = Suid.next();
 
-// call as constructor to wrap a regular Number in a Suid
-var NUL = new Suid(0);
+// call with a Number argument
+var ZERO = Suid(0);
+var ONE = new Suid(1);
 
-// call as constructor to wrap a (possibly compressed) base-32 string in a Suid
+// call with a (possibly compressed) base-32 string argument
 var suid = new Suid('14ub');
 </pre></big>
     </div>
@@ -193,7 +200,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-53">line 53</a>
+				 <a href="suid.js.html#sunlight-1-line-55">line 55</a>
 			</li>
 		</ul>
 	</dd>
@@ -342,7 +349,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-187">line 187</a>
+				 <a href="suid.js.html#sunlight-1-line-300">line 300</a>
 			</li>
 		</ul>
 	</dd>
@@ -354,7 +361,7 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>suid.Suid.decompress</li>
+			<li>ws.suid.Suid.decompress</li>
 			</ul>
 	</dd>
 	
@@ -491,7 +498,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-203">line 203</a>
+				 <a href="suid.js.html#sunlight-1-line-316">line 316</a>
 			</li>
 		</ul>
 	</dd>
@@ -503,7 +510,7 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>suid.Suid.decompress</li>
+			<li>ws.suid.Suid.decompress</li>
 			</ul>
 	</dd>
 	
@@ -549,7 +556,7 @@ var suid = new Suid('14ub');
     
     
     <div class="description">
-        <p>Creates a new suid from the given string.</p>
+        <p>Creates a new suid from the given base-32 string.</p>
     </div>
     
 
@@ -640,7 +647,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-170">line 170</a>
+				 <a href="suid.js.html#sunlight-1-line-183">line 183</a>
 			</li>
 		</ul>
 	</dd>
@@ -652,11 +659,153 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>suid.Suid.fromString</li>
+			<li>ws.suid.Suid.fromString</li>
 			
-			<li>suid.Suid.decompress</li>
+			<li>ws.suid.Suid.decompress</li>
 			</ul>
 	</dd>
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The newly created suid.</p>
+</div>
+
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".Suid.fromJSON"><span class="type-signature">&lt;static> </span>Suid.fromJSON<span class="signature">(json)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a new suid from the given JSON.</p>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JSON string.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="suid.js.html">suid.js</a>,
+				 <a href="suid.js.html#sunlight-1-line-200">line 200</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
 	
 
 	
@@ -791,7 +940,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-156">line 156</a>
+				 <a href="suid.js.html#sunlight-1-line-169">line 169</a>
 			</li>
 		</ul>
 	</dd>
@@ -803,9 +952,9 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>suid.Suid.fromBase32</li>
+			<li>ws.suid.Suid.fromBase32</li>
 			
-			<li>suid.Suid.decompress</li>
+			<li>ws.suid.Suid.decompress</li>
 			</ul>
 	</dd>
 	
@@ -830,6 +979,589 @@ var suid = new Suid('14ub');
             
 <div class="param-desc">
     <p>The newly created suid.</p>
+</div>
+
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".Suid.looksValid"><span class="type-signature">&lt;static> </span>Suid.looksValid<span class="signature">(str)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Indicates whether the given string value looks like a valid suid.</p>
+<p>If this method returns true, this only indicates that it <em>might</em>
+be a valid suid. There are no guarantees.</p>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>str</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JSON string.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="suid.js.html">suid.js</a>,
+				 <a href="suid.js.html#sunlight-1-line-219">line 219</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li>ws.suid.Suid.fromString</li>
+			
+			<li>ws.suid.Suid.decompress</li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>True if it looks valid, false otherwise.</p>
+</div>
+
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".Suid.looksValidJSON"><span class="type-signature">&lt;static> </span>Suid.looksValidJSON<span class="signature">(str)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Indicates whether the given JSON value looks like valid suid.</p>
+<p>If this method returns true, this only indicates that the
+JSON <em>might</em> be a valid suid. There are no guarantees.</p>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>str</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The JSON string.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="suid.js.html">suid.js</a>,
+				 <a href="suid.js.html#sunlight-1-line-251">line 251</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li>ws.suid.Suid.looksValid</li>
+			
+			<li>ws.suid.Suid.fromJSON</li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>True if it looks valid, false otherwise.</p>
+</div>
+
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".Suid.next"><span class="type-signature">&lt;static> </span>Suid.next<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Generates the next suid.</p>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="suid.js.html">suid.js</a>,
+				 <a href="suid.js.html#sunlight-1-line-330">line 330</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The next new suid.</p>
+</div>
+
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".Suid.revive"><span class="type-signature">&lt;static> </span>Suid.revive<span class="signature">(key, value)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Reviver function to be used i.c.w. JSON.parse.</p>
+<p>Example:</p>
+<big><pre>
+var object = {
+  id: Suid(),
+  name: 'Example'
+};
+var json = JSON.stringify(object); // json === '{&quot;id&quot;:&quot;Suid:19b&quot;,&quot;name&quot;:&quot;Example&quot;}'
+var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
+
+</pre></big>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the property to be revived.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value of the property to be revived.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="suid.js.html">suid.js</a>,
+				 <a href="suid.js.html#sunlight-1-line-284">line 284</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li>ws.suid.Suid.looksValidJSON</li>
+			
+			<li>ws.suid.Suid.fromJSON</li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>A suid if the JSON looks like a valid suid, the original value otherwise.</p>
 </div>
 
 
@@ -898,7 +1630,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-119">line 119</a>
+				 <a href="suid.js.html#sunlight-1-line-128">line 128</a>
 			</li>
 		</ul>
 	</dd>
@@ -910,9 +1642,9 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>suid.Suid#toString</li>
+			<li>ws.suid.Suid#toString</li>
 			
-			<li>suid.Suid.compress</li>
+			<li>ws.suid.Suid.compress</li>
 			</ul>
 	</dd>
 	
@@ -1005,7 +1737,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-106">line 106</a>
+				 <a href="suid.js.html#sunlight-1-line-111">line 111</a>
 			</li>
 		</ul>
 	</dd>
@@ -1017,9 +1749,9 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>suid.Suid#toBase32</li>
+			<li>ws.suid.Suid#toBase32</li>
 			
-			<li>suid.Suid.compress</li>
+			<li>ws.suid.Suid.compress</li>
 			</ul>
 	</dd>
 	
@@ -1112,7 +1844,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-142">line 142</a>
+				 <a href="suid.js.html#sunlight-1-line-155">line 155</a>
 			</li>
 		</ul>
 	</dd>
@@ -1190,7 +1922,7 @@ var suid = new Suid('14ub');
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-	on Mon Jun 1st 2015 using the <a
+	on Wed Jun 3rd 2015 using the <a
 	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 </span>
 </footer>

@@ -8,11 +8,12 @@
  * @License CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) 
  */
 /* jshint browser:true, shadow:true, devel:true */
-/** @namespace suid */
+/** @namespace ws.suid */
 (function(){
 	'use strict';
 	
-	var POOL = 'suidpool', 
+	var PREFIX = 'Suid:',
+		POOL = 'suidpool', 
 		DETECT = 'suiddetect',
 		
 		/** 
@@ -21,9 +22,9 @@
 		 * <big><code>'0123456789acdefghijkmnprstuvwxyz'</code></big>
 		 * 
 		 * @constant
-		 * @memberof! suid
-		 * @see {@link suid.Suid#toBase32}
-		 * @see {@link suid.Suid#toString}
+		 * @memberof! ws.suid
+		 * @see {@link ws.suid.Suid#toBase32}
+		 * @see {@link ws.suid.Suid#toString}
 		 */
 		ALPHABET = '0123456789acdefghijkmnprstuvwxyz',
 		
@@ -33,13 +34,14 @@
 		 * <big><code>[['b','00'], ['l','01'], ['o','02'], ['q','03']]</code></big>
 		 * 
 		 * @constant
-		 * @memberof! suid 
-		 * @see suid.Suid.compress
-		 * @see suid.Suid.decompress
+		 * @memberof! ws.suid 
+		 * @see ws.suid.Suid.compress
+		 * @see ws.suid.Suid.decompress
 		 */
 		REPLACEMENT_SYMBOLS = [['b','00'], ['l','01'], ['o','02'], ['q','03']],
-		
-		localStorageSupported = (function(ls){try{ls.setItem(DETECT, DETECT);ls.removeItem(DETECT);return true;}catch(e){return false;}})(localStorage),
+		LEGAL_CHARS = ALPHABET + 'bloq';
+	
+	var localStorageSupported = (function(ls){try{ls.setItem(DETECT, DETECT);ls.removeItem(DETECT);return true;}catch(e){return false;}})(localStorage),
 		log = window.console && console.error,
 		currentBlock,
 		currentId,
@@ -50,25 +52,33 @@
 			max: options.max || 2
 		};
 
-	/** 
-	 * <p>When called as a regular function, generates a new Suid. 
-	 * Any arguments will be ignored.</p>
+	/**
+	 * Distributed Service-Unique IDs that are short and sweet.
+	 *  
+	 * <p>When called without arguments, generates a new Suid.</p> 
 	 * 
-	 * <p>When called as a constructor, constructs a new Suid based
-	 * on the given value, which may be either a Number, or a 
-	 * (possibly compressed) Base32 String using suid's 
-	 * {@link suid.ALPHABET}.</p>
+	 * <p>When called with an argument, constructs a new Suid based
+	 * on the given value, which may be either a:</p>
+	 * 
+	 * <ul>
+	 *   <li>Number</li>
+	 *   <li>(possibly compressed) Base32 String</li>
+	 * </ul>
 	 * 
 	 * <p><b>Examples</b></p>
 	 * 
 	 * <big><pre>
-	 * // call as regular function to get the next id
-	 * var id = Suid();
+	 * // call without arguments to get the next id
+	 * var id1 = Suid();  // or,
+	 * var id2 = new Suid();
+	 * // this is equivalent to
+	 * var id3 = Suid.next();
 	 * 
-	 * // call as constructor to wrap a regular Number in a Suid
-	 * var NUL = new Suid(0);
+	 * // call with a Number argument
+	 * var ZERO = Suid(0);
+	 * var ONE = new Suid(1);
 	 * 
-	 * // call as constructor to wrap a (possibly compressed) base-32 string in a Suid
+	 * // call with a (possibly compressed) base-32 string argument
 	 * var suid = new Suid('14ub');
 	 * </pre></big>
 	 * 
@@ -76,20 +86,15 @@
 	 *              Only used when called as a constructor.
 	 * 
 	 * @class Suid
-	 * @memberof suid 
+	 * @memberof ws.suid 
 	 */
 	var Suid = (function() {
 		
 		function Suid(value) {
-			if (this instanceof Suid) {
-				// Constructor invocation
-				this.value = (typeof value === 'string' ? 
-						Suid.fromString(value).value : (value instanceof Suid ? value.value : value));
-				Number.call(this, this.value);
-			} else {
-				// Direct invocation
-				return next();
-			}
+			if (value === undefined) {return Suid.next();}
+			if (typeof value === 'string') {value = Suid.fromString(value);}
+			this.value = value instanceof Suid ? value.value : value;
+			Number.call(this, this.value);
 		}
 		
 		Suid.prototype = Object.create(Number.prototype);
@@ -99,12 +104,16 @@
 		 * 
 		 * @return The (possibly compressed) base-32 string.
 		 * 
-		 * @memberof! suid.Suid#
-		 * @see suid.Suid#toBase32
-		 * @see suid.Suid.compress
+		 * @memberof! ws.suid.Suid#
+		 * @see ws.suid.Suid#toBase32
+		 * @see ws.suid.Suid.compress
 		 */
 		Suid.prototype.toString = function Suid_toString() {
-			return Suid.compress(this.toBase32());
+			return Suid.compress(this.toBase32()); 
+		};
+		
+		Suid.prototype.toJSON = function Suid_toJSON() {
+			return PREFIX + this.toString();
 		};
 		
 		/**
@@ -112,9 +121,9 @@
 		 * 
 		 * @return The uncompressed base-32 string.
 		 *  
-		 * @memberof! suid.Suid#
-		 * @see suid.Suid#toString
-		 * @see suid.Suid.compress
+		 * @memberof! ws.suid.Suid#
+		 * @see ws.suid.Suid#toString
+		 * @see ws.suid.Suid.compress
 		 */
 		Suid.prototype.toBase32 = function Suid_toBase32() {
 			var value = this.valueOf();
@@ -132,12 +141,16 @@
 			return result;
 		};
 		
+		Suid.prototype.toJSON = function Suid_toJSON() {
+			return 'Suid:' + this.toString();
+		};
+		
 		/**
 		 * Returns the underlying value of this suid.
 		 * 
 		 * @return The underlying primitive Number value.
 		 * 
-		 * @memberof! suid.Suid#
+		 * @memberof! ws.suid.Suid#
 		 */
 		Suid.prototype.valueOf = function Suid_valueOf() {
 			return this.value;
@@ -149,23 +162,23 @@
 		 * @param str The (possibly compressed) base-32 string.
 		 * @return The newly created suid.
 		 * 
-		 * @memberof! suid.Suid
-		 * @see suid.Suid.fromBase32
-		 * @see suid.Suid.decompress
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.fromBase32
+		 * @see ws.suid.Suid.decompress
 		 */
 		Suid.fromString = function Suid_fromString(str) {
 			return Suid.fromBase32(Suid.decompress(str));
 		};
 		
 		/**
-		 * Creates a new suid from the given string.
+		 * Creates a new suid from the given base-32 string.
 		 * 
 		 * @param str The uncompressed base-32 string.
 		 * @return The newly created suid.
 		 * 
-		 * @memberof! suid.Suid
-		 * @see suid.Suid.fromString
-		 * @see suid.Suid.decompress
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.fromString
+		 * @see ws.suid.Suid.decompress
 		 */
 		Suid.fromBase32 = function Suid_fromBase32(str) {
 			var result = 0;
@@ -177,12 +190,112 @@
 		};
 		
 		/**
+		 * Creates a new suid from the given JSON.
+		 * 
+		 * @param json The JSON string.
+		 * @return The newly created suid.
+		 * 
+		 * @memberof! ws.suid.Suid
+		 */
+		Suid.fromJSON = function Suid_fromJSON(json) {
+			if (json === null) {return null;}
+			if (!json.indexOf(PREFIX)) {json = json.substr(PREFIX.length);}
+			return Suid.fromString(json);
+		};
+		
+		/**
+		 * Indicates whether the given string value looks like a valid suid.
+		 * 
+		 * If this method returns true, this only indicates that it *might*
+		 * be a valid suid. There are no guarantees.
+		 * 
+		 * @param str The JSON string.
+		 * @return True if it looks valid, false otherwise.
+		 * 
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.fromString
+		 * @see ws.suid.Suid.decompress
+		 */
+		Suid.looksValid = function Suid_looksValid(value) {
+			if (!value) {
+				return false;
+			}
+			var len = value.length;
+			if ((!len) || (len > 11)) {
+				return false;
+			}
+			if ((len === 11) && (ALPHABET.indexOf(value.charAt(0)) > 8)) {
+				return false;
+			}
+			for (var i=0; i<len; i++) {
+				if (LEGAL_CHARS.indexOf(value.charAt(i)) === -1) {
+					return false;
+				}
+			}
+			return true;
+		};
+		
+		/**
+		 * Indicates whether the given JSON value looks like valid suid.
+		 * 
+		 * If this method returns true, this only indicates that the
+		 * JSON *might* be a valid suid. There are no guarantees.
+		 * 
+		 * @param str The JSON string.
+		 * @return True if it looks valid, false otherwise.
+		 * 
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.looksValid
+		 * @see ws.suid.Suid.fromJSON
+		 */
+		Suid.looksValidJSON = function Suid_looksValidJSON(json) {
+			if (! (json && json.length)) {
+				return false;
+			}
+			if (json.indexOf(PREFIX) === -1) {
+				return false;
+			}
+			return Suid.looksValid(json.substr(PREFIX.length));
+		};
+
+		/**
+		 * Reviver function to be used i.c.w. JSON.parse.
+		 * 
+		 * Example:
+		 * 
+		 * <big><pre>
+		 * var object = {
+		 *   id: Suid(),
+		 *   name: 'Example'
+		 * };
+		 * var json = JSON.stringify(object); // json === '{"id":"Suid:19b","name":"Example"}'
+		 * var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
+		 * 
+		 * </pre></big>
+		 * 
+		 * @param key The name of the property to be revived.
+		 * @param value The value of the property to be revived.
+		 * @returns A suid if the JSON looks like a valid suid, the original value otherwise.
+		 * 
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.looksValidJSON
+		 * @see ws.suid.Suid.fromJSON
+		 */
+		Suid.revive = function Suid_revive(key, value) {
+			if (Suid.looksValidJSON(value)) {
+				return Suid.fromJSON(value);
+			}
+			return value;
+		};
+		
+		
+		/**
 		 * Compresses the given string.
 		 * 
 		 * @param str The uncompressed base-32 string.
 		 * @return The compressed base-32 string.
-		 * @memberof! suid.Suid
-		 * @see suid.Suid.decompress
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.decompress
 		 */
 		Suid.compress = function Suid_compress(str) {
 			for (var i=0, replacement; replacement=REPLACEMENT_SYMBOLS[i]; i++) {
@@ -197,8 +310,8 @@
 		 * @param str The compressed base-32 string.
 		 * @return The uncompressed base-32 string.
 		 * 
-		 * @memberof! suid.Suid
-		 * @see suid.Suid.decompress
+		 * @memberof! ws.suid.Suid
+		 * @see ws.suid.Suid.decompress
 		 */
 		Suid.decompress = function Suid_decompress(str) {
 			for (var i=0, replacement; replacement=REPLACEMENT_SYMBOLS[i]; i++) {
@@ -207,7 +320,14 @@
 			return str;
 		};
 		
-		function next() {
+		/**
+		 * Generates the next suid.
+		 * 
+		 * @return The next new suid.
+		 * 
+		 * @memberof! ws.suid.Suid
+		 */
+		Suid.next = function Suid_next() {
 			if (! currentBlock) {
 				Server.fetch();
 				var pool = Pool.get();
@@ -225,8 +345,7 @@
 				currentBlock = null;
 			}
 			return new Suid(result);
-		}
-		
+		};
 		return Suid;
 	})();
 
