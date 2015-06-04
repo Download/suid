@@ -329,7 +329,7 @@
 		 */
 		Suid.next = function Suid_next() {
 			var pool = Pool.get();
-			if (pool.length < settings.max) {
+			if (pool.length < settings.min) {
 				Server.fetch();
 			}
 			if (! currentBlock) {
