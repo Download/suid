@@ -1,5 +1,5 @@
 # suid v0.9.7
-Distributed Service-Unique IDs that are short and sweet.
+**Distributed Service-Unique IDs that are short and sweet.**
 [project website](http://download.github.io/suid/)
 
 Suids are IDs that are:
