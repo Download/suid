@@ -30,12 +30,12 @@ Suids are IDs that are:
 * Call `Suid()` to generate IDs
 
 ## Example
-
+```xml
 	<script src="//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js" 
 			data-suid-server="suid/suid.json"></script>
-
+```
 Later on:
-
+```javascript
 	var myId = Suid();
 	alert(myId);             // 14shd
 	alert(myId.valueOf());   // 1204748
@@ -48,7 +48,7 @@ Later on:
 	alert(json);             // '{"id":"suid:14shd","name":"test"}
 	var dst = JSON.parse(json, Suid.revive);
 	alert(dst.id);           // 14shd
-	
+```
 *Don't create new IDs by adding to existing IDs! Just call `Suid()` again.*
 
 ## Need a server? 
@@ -56,11 +56,11 @@ Check out the Java EE implementation: [suid-server-java](http://download.github.
 
 ## Options
 You can specify options by including the `data-suid-options` attribute in the script element an giving a pseudo-json options string, like so:
-
+```xml
 	<script src="//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js" 
 			data-suid-server="suid/suid.json"
 			data-suid-options="{'min':3, 'max':3}"></script>
-
+```
 The pseudo-json is basically normal json but with single quotes instead of double.
 
 ### Suid pool options
