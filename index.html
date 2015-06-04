@@ -29,9 +29,10 @@
     <div class="container">
       <section id="main_content">
         <h1>
-<a id="suid-v096" class="anchor" href="#suid-v096" aria-hidden="true"><span class="octicon octicon-link"></span></a>suid v0.9.6</h1>
+<a id="suid-v097" class="anchor" href="#suid-v097" aria-hidden="true"><span class="octicon octicon-link"></span></a>suid v0.9.7</h1>
 
-<p>Distributed Service-Unique IDs that are short and sweet.</p>
+<p>Distributed Service-Unique IDs that are short and sweet.
+<a href="http://download.github.io/suid/">project website</a></p>
 
 <p>Suids are IDs that are:</p>
 
@@ -40,22 +41,39 @@
 <li>Short</li>
 <li>Ordered</li>
 <li>Easy for humans to read, write and pronounce</li>
-<li>53 bits so they fit into a single Javascript or PHP Number, Java Long, Int64 etc.</li>
+<li>53 bits so they fit into a single Javascript or PHP Number, Java Long, SQL BigInt etc.</li>
 </ul>
 
 <h2>
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
-<li><a href="https://github.com/Download/suid/releases/download/0.9.6/suid.js">Commented (~7kB)</a></li>
-<li><a href="https://github.com/Download/suid/releases/download/0.9.6/suid.min.js">Minified (~3 KB)</a></li>
+<li>Commented (~7kB): <a href="https://github.com/Download/suid/releases/download/0.9.7/suid.js">suid.js</a>
+</li>
+<li>Minified (~3 KB): <a href="https://github.com/Download/suid/releases/download/0.9.7/suid.min.js">suid.min.js</a>
+</li>
+<li>Map file: <a href="https://github.com/Download/suid/releases/download/0.9.7/suid.min.js.map">suid.min.js.map</a>
+</li>
 </ul>
 
 <h2>
 <a id="cdn" class="anchor" href="#cdn" aria-hidden="true"><span class="octicon octicon-link"></span></a>CDN</h2>
 
-<pre><code>//cdn.rawgit.com/download/suid/0.9.6/dist/suid.min.js
-</code></pre>
+<ul>
+<li>Commented: <code>//cdn.rawgit.com/download/suid/0.9.7/dist/suid.js</code>
+</li>
+<li>Minified : <code>//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js</code>
+</li>
+<li>Map file : <code>//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js.map</code>
+</li>
+</ul>
+
+<h2>
+<a id="bower" class="anchor" href="#bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bower</h2>
+
+<ul>
+<li><code>bower install download/suid --save</code></li>
+</ul>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -70,21 +88,23 @@
 <h2>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
 
-<pre><code>&lt;script src="//cdn.rawgit.com/download/suid/0.9.6/dist/suid.min.js" 
-        data-suid-server="suid/suid.json"
-        data-suid-options="{'min':3, 'max':3}"&gt;&lt;/script&gt;
-</code></pre>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
 <p>Later on:</p>
 
-<pre><code>var myId = Suid();
-alert(myId);             // 14shd
-alert(myId.valueOf());   // 1204748
-var halve = myId / 2;
-var halveId = new Suid(halve);
-alert(halve);            // 602374
-alert(halveId);          // jd86
-</code></pre>
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> myId <span class="pl-k">=</span> Suid();
+<span class="pl-c1">alert</span>(myId);             <span class="pl-c">// 14shd</span>
+<span class="pl-c1">alert</span>(myId.<span class="pl-c1">valueOf</span>());   <span class="pl-c">// 1204748</span>
+<span class="pl-k">var</span> halve <span class="pl-k">=</span> myId / <span class="pl-c1">2</span>;
+<span class="pl-k">var</span> halveId <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Suid</span>(halve);
+<span class="pl-c1">alert</span>(halve);            <span class="pl-c">// 602374</span>
+<span class="pl-c1">alert</span>(halveId);          <span class="pl-c">// jd86</span>
+<span class="pl-k">var</span> src <span class="pl-k">=</span> {id<span class="pl-k">:</span> myId, name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>};
+<span class="pl-k">var</span> json <span class="pl-k">=</span> <span class="pl-c1">JSON</span>.stringify(src);
+<span class="pl-c1">alert</span>(json);             <span class="pl-c">// '{"id":"suid:14shd","name":"test"}</span>
+<span class="pl-k">var</span> dst <span class="pl-k">=</span> <span class="pl-c1">JSON</span>.<span class="pl-c1">parse</span>(json, Suid.revive);
+<span class="pl-c1">alert</span>(dst.<span class="pl-c1">id</span>);           <span class="pl-c">// 14shd</span></pre></div>
 
 <p><em>Don't create new IDs by adding to existing IDs! Just call <code>Suid()</code> again.</em></p>
 
@@ -95,6 +115,17 @@ alert(halveId);          // jd86
 
 <h2>
 <a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<p>You can specify options by including the <code>data-suid-options</code> attribute in the script element an giving a pseudo-json options string, like so:</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>
+        <span class="pl-e">data-suid-options</span>=<span class="pl-s"><span class="pl-pds">"</span>{'min':3, 'max':3}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>The pseudo-json is basically normal json but with single quotes instead of double.</p>
+
+<h3>
+<a id="suid-pool-options" class="anchor" href="#suid-pool-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Suid pool options</h3>
 
 <p>The suid script fetches suid blocks from the suid server and stores them in a pool in <a href="http://www.w3.org/TR/webstorage/#storage">localStorage</a> (<a href="http://caniuse.com/#search=localstorage">browser support</a>). This pool is accessible from all tabs that are from the same domain, maximizing the efficient use of suid blocks. </p>
 
@@ -107,16 +138,15 @@ alert(halveId);          // jd86
 <code>max</code>: Maximum number of suid blocks to keep in the pool, defaults to 2</li>
 </ul>
 
-<p>Option <code>min</code> determines how low the amount of blocks in the pool may become before the script will request new blocks from the server. Option <code>max</code> determines how many blocks the script will fetch during each request in order to fill the
-pool up again. If your application has moments in which it consumes a lot of IDs in a short timeframe, or if your application is expected to be used offline for prolonged periods, choose a <code>min</code> that ensures enough IDs will always
-be in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks (at the expense of more ID blocks going wasted when caches are cleared etc) choose a <code>max</code> that is a number of blocks higher then your <code>min</code>.</p>
+<p>Option <code>min</code> determines how low the amount of blocks in the pool may become before the script will request new blocks from the server. Option <code>max</code> determines how many blocks the script will fetch during each request in order to fill the pool up again. If your application has moments in which it consumes a lot of IDs in a short timeframe, or if your application is expected to be used offline for prolonged periods, choose a <code>min</code> that ensures enough IDs will always be in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks (at the expense of more ID blocks going wasted when caches are cleared etc) choose a <code>max</code> that is a number of blocks higher then your <code>min</code>.</p>
 
 <p>At most 8 blocks can be requested from the pool simultaneously so bear this in mind when configuring your pool. I would guess that the default settings are good enough for most people.</p>
 
 <h2>
 <a id="api-documentation" class="anchor" href="#api-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>API documentation</h2>
 
-<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.9.6/doc/suid.Suid.html">generated documentation</a>.</p>
+<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.9.7/doc/ws.suid.Suid.html">Suid JS API documentation</a> 
+for details on the API.</p>
 
 <h2>
 <a id="why-suids" class="anchor" href="#why-suids" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Suids?</h2>
@@ -146,6 +176,9 @@ possible IDs and end with the long ones. </p>
 <p>So.. is there middle ground? The best of both worlds? I think so. Which is why I
 built Suid.</p>
 
+<h3>
+<a id="distributed-but-coordinated" class="anchor" href="#distributed-but-coordinated" aria-hidden="true"><span class="octicon octicon-link"></span></a>Distributed but coordinated</h3>
+
 <p>Suids are coordinated by a central server. The server hands out ID blocks, each of
 which allows an ID generator to generate up to 256 IDs without any further need
 for communication with the server. It's implementation is inspired by 
@@ -153,6 +186,9 @@ for communication with the server. It's implementation is inspired by
 for generating their IDs. Flickr however serves IDs one at a time, whereas Suid
 servers hand out IDs in blocks of 256 to minimize network overhead and facilitate
 longer periods of offline usage.</p>
+
+<h3>
+<a id="short" class="anchor" href="#short" aria-hidden="true"><span class="octicon octicon-link"></span></a>Short</h3>
 
 <p>Suids fit in 53-bits, which means they can be treated as a native number in all
 major programming languages, including PHP and Javascript. And because they are
@@ -176,13 +212,29 @@ issued dozens of billions of IDs do we get IDs of 8 characters or longer.</p>
 <p>The total ID space of a suid can contain <code>9,007,199,254,740,992</code> or 
 9 quadrillion, 7 trillion, 199 billion, 254 million, 740 thousand 992 IDs.  :)</p>
 
+<h3>
+<a id="sweet" class="anchor" href="#sweet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sweet</h3>
+
+<p>The default representation of a Suid uses 36 different symbols (<code>0..9a..z</code>) and are easy
+for humans to read, write and pronounce, as well as URL-safe.
+Using (only lowercase!) letters in addition to the decimals actually makes the IDs easier
+for humans to work with, Just compare:</p>
+
+<pre><code>14shd
+1204748
+</code></pre>
+
+<p>Especially when having to read an ID to someone over the phone, adding in uppercase letters
+and special symbols such as dash <code>-</code>, tilde <code>~</code> and underscore <code>_</code> makes the process very
+error-prone and tedious.</p>
+
 <h2>
 <a id="technical-background" class="anchor" href="#technical-background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technical background</h2>
 
 <p>The 53 bits in a suid are distributed over a 64-bit long as depicted below:</p>
 
 <pre><code>                 HIGH INT                                         LOW INT
-________________________________________________________________________________________________
+ _______________________________________________________________________________________________
 |                                               |                                               |
 | 0000 0000 | 000b bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbii | iiii iiss |
 |_______________________________________________|_______________________________________________|
@@ -227,7 +279,7 @@ uniquely marks a suid as a block suid.</p>
 <h2>
 <a id="copyright" class="anchor" href="#copyright" aria-hidden="true"><span class="octicon octicon-link"></span></a>Copyright</h2>
 
-<p>Copyright (c) 2015 by Stijn de Witt. Some rights reserved.</p>
+<p>Copyright (c) 2015 by <a href="http://StijnDeWitt.com">Stijn de Witt</a>. Some rights reserved.</p>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
