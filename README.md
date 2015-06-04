@@ -54,7 +54,7 @@ You can specify options by including the `data-suid-options` attribute in the sc
 
 	<script src="//cdn.rawgit.com/download/suid/0.9.7/dist/suid.min.js" 
 			data-suid-server="suid/suid.json"
-			**data-suid-options="{'min':3, 'max':3}"**></script>
+			data-suid-options="{'min':3, 'max':3}"></script>
 
 The pseudo-json is basically normal json but with single quotes instead of double.
 
@@ -139,23 +139,23 @@ The default representation of a Suid uses 36 different symbols (`0..9a..z`) and 
 for humans to read, write and pronounce, as well as URL-safe.
 Using (only lowercase!) letters in addition to the decimals actually makes the IDs easier
 for humans to work with, Just compare:
-<big>
+
 	14shd
 	1204748
-</big>
 
 Especially when having to read an ID to someone over the phone, adding in uppercase letters
-and special symbols such as dash `-`, tilde `~` and underscore `_` only makes matters worse.
+and special symbols such as dash `-`, tilde `~` and underscore `_` makes the process very
+error-prone and tedious.
 
 ## Technical background
 The 53 bits in a suid are distributed over a 64-bit long as depicted below:
 
 	                 HIGH INT                                         LOW INT
-	________________________________________________________________________________________________
+	 _______________________________________________________________________________________________
 	|                                               |                                               |
 	| 0000 0000 | 000b bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbii | iiii iiss |
 	|_______________________________________________|_______________________________________________|
- 
+	
 	0 = 11 reserved bits
 	b = 43 block bits
 	i = 8 ID bits

@@ -328,8 +328,11 @@
 		 * @memberof! ws.suid.Suid
 		 */
 		Suid.next = function Suid_next() {
-			if (! currentBlock) {
+			var pool = Pool.get();
+			if (pool.length < settings.max) {
 				Server.fetch();
+			}
+			if (! currentBlock) {
 				var pool = Pool.get();
 				if (pool.length === 0) {
 					throw new Error('Unable to generate IDs. Suid block pool exhausted.');
@@ -387,7 +390,6 @@
 		
 		function handleSuccess(text) {
 			retries = 0;
-			started = 0;
 			var pool = Pool.get();
 			pool.push(JSON.parse(text));
 			Pool.set(pool);
@@ -411,7 +413,6 @@
 		
 		function retry(request) {
 			if (retries === 0) {
-				started = 0;
 				if (log) {console.error('Giving up fetching suid data after 5 attempts to fetch from server url: ' + settings.url);}
 				return;
 			}
