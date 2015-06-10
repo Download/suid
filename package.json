@@ -1,6 +1,6 @@
 {
   "name": "suid",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Distributed Service-Unique IDs that are short and sweet.",
   "repository": {
     "type": "git",

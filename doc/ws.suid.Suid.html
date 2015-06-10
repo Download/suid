@@ -90,7 +90,8 @@ on the given value, which may be either a:</p>
 
 <ul>
   <li>Number</li>
-  <li>(possibly compressed) Base32 String</li>
+  <li>Base-36 String</li>
+  <li>Other Suid</li>
 </ul>
 
 <p><b>Examples</b></p>
@@ -106,8 +107,8 @@ var id3 = Suid.next();
 var ZERO = Suid(0);
 var ONE = new Suid(1);
 
-// call with a (possibly compressed) base-32 string argument
-var suid = new Suid('14ub');
+// call with a base-36 string argument
+var suid = new Suid('14she');
 </pre></big>
     </div>
     
@@ -200,7 +201,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-55">line 55</a>
+				 <a href="suid.js.html#sunlight-1-line-43">line 43</a>
 			</li>
 		</ul>
 	</dd>
@@ -248,455 +249,6 @@ var suid = new Suid('14ub');
         <h3 class="subsection-title">Methods</h3>
 
         <dl>
-            
-<dt>
-    <h4 class="name" id=".Suid.compress"><span class="type-signature">&lt;static> </span>Suid.compress<span class="signature">(str)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Compresses the given string.</p>
-    </div>
-    
-
-    
-
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>str</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The uncompressed base-32 string.</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-300">line 300</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li>ws.suid.Suid.decompress</li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>The compressed base-32 string.</p>
-</div>
-
-
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id=".Suid.decompress"><span class="type-signature">&lt;static> </span>Suid.decompress<span class="signature">(str)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Decompresses the given string.</p>
-    </div>
-    
-
-    
-
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>str</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The compressed base-32 string.</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-316">line 316</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li>ws.suid.Suid.decompress</li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>The uncompressed base-32 string.</p>
-</div>
-
-
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id=".Suid.fromBase32"><span class="type-signature">&lt;static> </span>Suid.fromBase32<span class="signature">(str)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates a new suid from the given base-32 string.</p>
-    </div>
-    
-
-    
-
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-
-		<th>Type</th>
-
-		
-
-		
-
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
-
-        <tr>
-            
-                <td class="name"><code>str</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The uncompressed base-32 string.</p></td>
-        </tr>
-
-	
-	</tbody>
-</table>
-
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-183">line 183</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li>ws.suid.Suid.fromString</li>
-			
-			<li>ws.suid.Suid.decompress</li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>The newly created suid.</p>
-</div>
-
-
-
-
-        
-    
-    
-</dd>
-
-        
             
 <dt>
     <h4 class="name" id=".Suid.fromJSON"><span class="type-signature">&lt;static> </span>Suid.fromJSON<span class="signature">(json)</span><span class="type-signature"></span></h4>
@@ -798,7 +350,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-200">line 200</a>
+				 <a href="suid.js.html#sunlight-1-line-157">line 157</a>
 			</li>
 		</ul>
 	</dd>
@@ -806,6 +358,13 @@ var suid = new Suid('14ub');
 
 	
 
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li>ws.suid.Suid#toJSON</li>
+			</ul>
+	</dd>
 	
 
 	
@@ -895,7 +454,7 @@ var suid = new Suid('14ub');
 
             
 
-            <td class="description last"><p>The (possibly compressed) base-32 string.</p></td>
+            <td class="description last"><p>The base-36 string.</p></td>
         </tr>
 
 	
@@ -940,7 +499,7 @@ var suid = new Suid('14ub');
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-169">line 169</a>
+				 <a href="suid.js.html#sunlight-1-line-144">line 144</a>
 			</li>
 		</ul>
 	</dd>
@@ -952,9 +511,7 @@ var suid = new Suid('14ub');
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>ws.suid.Suid.fromBase32</li>
-			
-			<li>ws.suid.Suid.decompress</li>
+			<li>ws.suid.Suid#toString</li>
 			</ul>
 	</dd>
 	
@@ -1093,7 +650,7 @@ be a valid suid. There are no guarantees.</p>
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-219">line 219</a>
+				 <a href="suid.js.html#sunlight-1-line-175">line 175</a>
 			</li>
 		</ul>
 	</dd>
@@ -1106,8 +663,6 @@ be a valid suid. There are no guarantees.</p>
 	<dd class="tag-see">
 		<ul>
 			<li>ws.suid.Suid.fromString</li>
-			
-			<li>ws.suid.Suid.decompress</li>
 			</ul>
 	</dd>
 	
@@ -1153,7 +708,7 @@ be a valid suid. There are no guarantees.</p>
     
     
     <div class="description">
-        <p>Indicates whether the given JSON value looks like valid suid.</p>
+        <p>Indicates whether the given JSON value looks like a valid suid.</p>
 <p>If this method returns true, this only indicates that the
 JSON <em>might</em> be a valid suid. There are no guarantees.</p>
     </div>
@@ -1246,7 +801,7 @@ JSON <em>might</em> be a valid suid. There are no guarantees.</p>
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-251">line 251</a>
+				 <a href="suid.js.html#sunlight-1-line-207">line 207</a>
 			</li>
 		</ul>
 	</dd>
@@ -1353,7 +908,7 @@ JSON <em>might</em> be a valid suid. There are no guarantees.</p>
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-330">line 330</a>
+				 <a href="suid.js.html#sunlight-1-line-255">line 255</a>
 			</li>
 		</ul>
 	</dd>
@@ -1523,7 +1078,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-284">line 284</a>
+				 <a href="suid.js.html#sunlight-1-line-240">line 240</a>
 			</li>
 		</ul>
 	</dd>
@@ -1575,7 +1130,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
         
             
 <dt>
-    <h4 class="name" id="toBase32"><span class="type-signature"></span>Suid#toBase32<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toJSON"><span class="type-signature"></span>Suid#toJSON<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1583,7 +1138,11 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
     
     
     <div class="description">
-        <p>Converts this suid to a base-32 string.</p>
+        <p>Converts this suid to a JSON string.</p>
+<p>The returned String will be of the format <code>'PREFIX:base-36'</code>,
+where <code>PREFIX</code> is the string <code>'Suid:'</code> and 
+<code>base-36</code> is the suid in base-36. </p>
+<p>For example: <code>'Suid:14she'</code>.</p>
     </div>
     
 
@@ -1630,7 +1189,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-128">line 128</a>
+				 <a href="suid.js.html#sunlight-1-line-120">line 120</a>
 			</li>
 		</ul>
 	</dd>
@@ -1642,9 +1201,13 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li>ws.suid.Suid#toString</li>
+			<li>ws.suid.Suid.PREFIX</li>
 			
-			<li>ws.suid.Suid.compress</li>
+			<li>ws.suid.Suid.fromJSON</li>
+			
+			<li>ws.suid.Suid.looksValidJSON</li>
+			
+			<li>ws.suid.Suid.revive</li>
 			</ul>
 	</dd>
 	
@@ -1668,7 +1231,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
     
             
 <div class="param-desc">
-    <p>The uncompressed base-32 string.</p>
+    <p>The JSON string.</p>
 </div>
 
 
@@ -1690,7 +1253,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
     
     
     <div class="description">
-        <p>Converts this suid to string.</p>
+        <p>Converts this suid to a base-36 string.</p>
     </div>
     
 
@@ -1737,7 +1300,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-111">line 111</a>
+				 <a href="suid.js.html#sunlight-1-line-98">line 98</a>
 			</li>
 		</ul>
 	</dd>
@@ -1745,15 +1308,6 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 
 	
 
-	
-	<dt class="tag-see">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li>ws.suid.Suid#toBase32</li>
-			
-			<li>ws.suid.Suid.compress</li>
-			</ul>
-	</dd>
 	
 
 	
@@ -1775,7 +1329,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
     
             
 <div class="param-desc">
-    <p>The (possibly compressed) base-32 string.</p>
+    <p>The base-36 string.</p>
 </div>
 
 
@@ -1844,7 +1398,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-155">line 155</a>
+				 <a href="suid.js.html#sunlight-1-line-131">line 131</a>
 			</li>
 		</ul>
 	</dd>
@@ -1922,7 +1476,7 @@ var obj = JSON.parse(object, Suid.revive); // obj.id instanceof Suid === true
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-	on Wed Jun 3rd 2015 using the <a
+	on Wed Jun 10th 2015 using the <a
 	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 </span>
 </footer>

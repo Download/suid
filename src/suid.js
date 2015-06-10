@@ -13,33 +13,21 @@
 	'use strict';
 	
 	var PREFIX = 'Suid:',
+		SHARDSIZE = 4,
+		IDSIZE = 32,
+		THROTTLE = 5000,
 		POOL = 'suidpool', 
 		DETECT = 'suiddetect',
 		
 		/** 
-		 * The alphabet used when serializing to base-32.
+		 * The alphabet used when serializing to base-36.
 		 * 
-		 * <big><code>'0123456789acdefghijkmnprstuvwxyz'</code></big>
+		 * <big><code>'0123456789abcdefghijklmnopqrstuvwxyz'</code></big>
 		 * 
 		 * @constant
 		 * @memberof! ws.suid
-		 * @see {@link ws.suid.Suid#toBase32}
-		 * @see {@link ws.suid.Suid#toString}
 		 */
-		ALPHABET = '0123456789acdefghijkmnprstuvwxyz',
-		
-		/** 
-		 * The replacement symbols used during compression.
-		 * 
-		 * <big><code>[['b','00'], ['l','01'], ['o','02'], ['q','03']]</code></big>
-		 * 
-		 * @constant
-		 * @memberof! ws.suid 
-		 * @see ws.suid.Suid.compress
-		 * @see ws.suid.Suid.decompress
-		 */
-		REPLACEMENT_SYMBOLS = [['b','00'], ['l','01'], ['o','02'], ['q','03']],
-		LEGAL_CHARS = ALPHABET + 'bloq';
+		ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 	
 	var localStorageSupported = (function(ls){try{ls.setItem(DETECT, DETECT);ls.removeItem(DETECT);return true;}catch(e){return false;}})(localStorage),
 		log = window.console && console.error,
@@ -48,8 +36,8 @@
 		options = getOptions(),
 		settings = {
 			url: options.url,
-			min: options.min || 2,
-			max: options.max || 2
+			min: options.min || 3,
+			max: options.max || 4
 		};
 
 	/**
@@ -62,7 +50,8 @@
 	 * 
 	 * <ul>
 	 *   <li>Number</li>
-	 *   <li>(possibly compressed) Base32 String</li>
+	 *   <li>Base-36 String</li>
+	 *   <li>Other Suid</li>
 	 * </ul>
 	 * 
 	 * <p><b>Examples</b></p>
@@ -78,8 +67,8 @@
 	 * var ZERO = Suid(0);
 	 * var ONE = new Suid(1);
 	 * 
-	 * // call with a (possibly compressed) base-32 string argument
-	 * var suid = new Suid('14ub');
+	 * // call with a base-36 string argument
+	 * var suid = new Suid('14she');
 	 * </pre></big>
 	 * 
 	 * @param value The Number or String value for the new Suid.
@@ -100,49 +89,36 @@
 		Suid.prototype = Object.create(Number.prototype);
 		
 		/** 
-		 * Converts this suid to string.
+		 * Converts this suid to a base-36 string.
 		 * 
-		 * @return The (possibly compressed) base-32 string.
+		 * @return The base-36 string.
 		 * 
 		 * @memberof! ws.suid.Suid#
-		 * @see ws.suid.Suid#toBase32
-		 * @see ws.suid.Suid.compress
 		 */
 		Suid.prototype.toString = function Suid_toString() {
-			return Suid.compress(this.toBase32()); 
+			return this.value.toString(36); 
 		};
 		
+		/** 
+		 * Converts this suid to a JSON string.
+		 * 
+		 * The returned String will be of the format <code>'PREFIX:base-36'</code>,
+		 * where <code>PREFIX</code> is the string <code>'Suid:'</code> and 
+		 * <code>base-36</code> is the suid in base-36. 
+		 * 
+		 * For example: <code>'Suid:14she'</code>.
+		 * 
+		 * @return The JSON string.
+		 * 
+		 * @memberof! ws.suid.Suid#
+		 * 
+		 * @see {@link ws.suid.Suid.PREFIX}
+		 * @see {@link ws.suid.Suid.fromJSON}
+		 * @see {@link ws.suid.Suid.looksValidJSON}
+		 * @see {@link ws.suid.Suid.revive}
+		 */
 		Suid.prototype.toJSON = function Suid_toJSON() {
 			return PREFIX + this.toString();
-		};
-		
-		/**
-		 * Converts this suid to a base-32 string.
-		 * 
-		 * @return The uncompressed base-32 string.
-		 *  
-		 * @memberof! ws.suid.Suid#
-		 * @see ws.suid.Suid#toString
-		 * @see ws.suid.Suid.compress
-		 */
-		Suid.prototype.toBase32 = function Suid_toBase32() {
-			var value = this.valueOf();
-			var result='', tmp='';
-			for (var i=0; i<11; i++) {
-				var idx = value & 0x1f;
-				if (! idx) {
-					tmp += '0';
-				} else {
-					result = ALPHABET.charAt(idx) + tmp + result;
-					tmp = '';
-				}
-				value = value / 32;
-			}
-			return result;
-		};
-		
-		Suid.prototype.toJSON = function Suid_toJSON() {
-			return 'Suid:' + this.toString();
 		};
 		
 		/**
@@ -159,34 +135,14 @@
 		/**
 		 * Creates a new suid from the given string.
 		 * 
-		 * @param str The (possibly compressed) base-32 string.
+		 * @param str The base-36 string.
 		 * @return The newly created suid.
 		 * 
 		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.fromBase32
-		 * @see ws.suid.Suid.decompress
+		 * @see {@link ws.suid.Suid#toString}
 		 */
 		Suid.fromString = function Suid_fromString(str) {
-			return Suid.fromBase32(Suid.decompress(str));
-		};
-		
-		/**
-		 * Creates a new suid from the given base-32 string.
-		 * 
-		 * @param str The uncompressed base-32 string.
-		 * @return The newly created suid.
-		 * 
-		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.fromString
-		 * @see ws.suid.Suid.decompress
-		 */
-		Suid.fromBase32 = function Suid_fromBase32(str) {
-			var result = 0;
-			for (var i=0; i<str.length; i++) {
-				var idx = ALPHABET.indexOf(str.charAt(i));
-				result = result * 32 + idx;
-			}
-			return new Suid(result);
+			return new Suid(parseInt(str, 36)); // Suid.fromBase32(Suid.decompress(str));
 		};
 		
 		/**
@@ -196,6 +152,7 @@
 		 * @return The newly created suid.
 		 * 
 		 * @memberof! ws.suid.Suid
+		 * @see {@link ws.suid.Suid#toJSON}
 		 */
 		Suid.fromJSON = function Suid_fromJSON(json) {
 			if (json === null) {return null;}
@@ -213,8 +170,7 @@
 		 * @return True if it looks valid, false otherwise.
 		 * 
 		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.fromString
-		 * @see ws.suid.Suid.decompress
+		 * @see {@link ws.suid.Suid.fromString}
 		 */
 		Suid.looksValid = function Suid_looksValid(value) {
 			if (!value) {
@@ -224,11 +180,11 @@
 			if ((!len) || (len > 11)) {
 				return false;
 			}
-			if ((len === 11) && (ALPHABET.indexOf(value.charAt(0)) > 8)) {
+			if ((len === 11) && (ALPHABET.indexOf(value.charAt(0)) > 2)) {
 				return false;
 			}
 			for (var i=0; i<len; i++) {
-				if (LEGAL_CHARS.indexOf(value.charAt(i)) === -1) {
+				if (ALPHABET.indexOf(value.charAt(i)) === -1) {
 					return false;
 				}
 			}
@@ -236,7 +192,7 @@
 		};
 		
 		/**
-		 * Indicates whether the given JSON value looks like valid suid.
+		 * Indicates whether the given JSON value looks like a valid suid.
 		 * 
 		 * If this method returns true, this only indicates that the
 		 * JSON *might* be a valid suid. There are no guarantees.
@@ -245,8 +201,8 @@
 		 * @return True if it looks valid, false otherwise.
 		 * 
 		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.looksValid
-		 * @see ws.suid.Suid.fromJSON
+		 * @see {@link ws.suid.Suid.looksValid}
+		 * @see {@link ws.suid.Suid.fromJSON}
 		 */
 		Suid.looksValidJSON = function Suid_looksValidJSON(json) {
 			if (! (json && json.length)) {
@@ -278,8 +234,8 @@
 		 * @returns A suid if the JSON looks like a valid suid, the original value otherwise.
 		 * 
 		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.looksValidJSON
-		 * @see ws.suid.Suid.fromJSON
+		 * @see {@link ws.suid.Suid.looksValidJSON}
+		 * @see {@link ws.suid.Suid.fromJSON}
 		 */
 		Suid.revive = function Suid_revive(key, value) {
 			if (Suid.looksValidJSON(value)) {
@@ -290,37 +246,6 @@
 		
 		
 		/**
-		 * Compresses the given string.
-		 * 
-		 * @param str The uncompressed base-32 string.
-		 * @return The compressed base-32 string.
-		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.decompress
-		 */
-		Suid.compress = function Suid_compress(str) {
-			for (var i=0, replacement; replacement=REPLACEMENT_SYMBOLS[i]; i++) {
-				str = str.replace(new RegExp(replacement[1], 'g'), replacement[0]);
-			}
-			return str;
-		};
-		
-		/**
-		 * Decompresses the given string.
-		 * 
-		 * @param str The compressed base-32 string.
-		 * @return The uncompressed base-32 string.
-		 * 
-		 * @memberof! ws.suid.Suid
-		 * @see ws.suid.Suid.decompress
-		 */
-		Suid.decompress = function Suid_decompress(str) {
-			for (var i=0, replacement; replacement=REPLACEMENT_SYMBOLS[i]; i++) {
-				str = str.replace(new RegExp(replacement[0], 'g'), replacement[1]);
-			}
-			return str;
-		};
-		
-		/**
 		 * Generates the next suid.
 		 * 
 		 * @return The next new suid.
@@ -329,11 +254,10 @@
 		 */
 		Suid.next = function Suid_next() {
 			var pool = Pool.get();
-			if (pool.length < settings.min) {
+			if ((pool.length < settings.min) || ((!currentBlock && pool.length === settings.min))) {
 				Server.fetch();
 			}
 			if (! currentBlock) {
-				var pool = Pool.get();
 				if (pool.length === 0) {
 					throw new Error('Unable to generate IDs. Suid block pool exhausted.');
 				}
@@ -342,9 +266,9 @@
 				Pool.set(pool);
 			}
 			
-			var result = currentBlock + currentId * 4;
+			var result = currentBlock + currentId * SHARDSIZE;
 			currentId++;
-			if (currentId > 255) {
+			if (currentId >= IDSIZE) {
 				currentBlock = null;
 			}
 			return new Suid(result);
@@ -432,7 +356,7 @@
 					after = 60000; // 1 min
 				}
 			}
-			if (currentId > 100) { // half of current block left
+			if (currentId > (IDSIZE/2)) { // less than half of current block left
 				if (after > 30000) {
 					after = 30000; // 0.5 min
 				}
@@ -470,8 +394,8 @@
 
 		return {
 			fetch: function Server_fetch() {
-				if (retries && ((new Date().getTime() - started < 5000) || 
-								(currentId && (currentId < 100)))) {
+				if (retries && ((new Date().getTime() - started < THROTTLE) || 
+								(currentId && (currentId < (IDSIZE/2))))) {
 					return; // already fetching and still recent or not urgent
 				} 
 				var pool = Pool.get();

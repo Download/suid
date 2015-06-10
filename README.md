@@ -1,4 +1,4 @@
-# suid v0.9.8
+# suid v0.9.9
 **Distributed Service-Unique IDs that are short and sweet.**
 [project website](http://download.github.io/suid/)
 
@@ -11,14 +11,14 @@ Suids are IDs that are:
 * 53 bits so they fit into a single Javascript or PHP Number, Java Long, SQL BigInt etc.
 
 ## Download
-* Commented (~7kB): [suid.js](https://github.com/Download/suid/releases/download/0.9.8/suid.js)
-* Minified (~3 KB): [suid.min.js](https://github.com/Download/suid/releases/download/0.9.8/suid.min.js)
-* Map file: [suid.min.js.map](https://github.com/Download/suid/releases/download/0.9.8/suid.min.js.map)
+* Commented (~7kB): [suid.js](https://github.com/Download/suid/releases/download/0.9.9/suid.js)
+* Minified (~3 KB): [suid.min.js](https://github.com/Download/suid/releases/download/0.9.9/suid.min.js)
+* Map file: [suid.min.js.map](https://github.com/Download/suid/releases/download/0.9.9/suid.min.js.map)
 
 ## CDN
-* Commented: `//cdn.rawgit.com/download/suid/0.9.8/dist/suid.js`
-* Minified : `//cdn.rawgit.com/download/suid/0.9.8/dist/suid.min.js`
-* Map file : `//cdn.rawgit.com/download/suid/0.9.8/dist/suid.min.js.map`
+* Commented: `//cdn.rawgit.com/download/suid/0.9.9/dist/suid.js`
+* Minified : `//cdn.rawgit.com/download/suid/0.9.9/dist/suid.min.js`
+* Map file : `//cdn.rawgit.com/download/suid/0.9.9/dist/suid.min.js.map`
 
 ## Bower
 * `bower install download/suid --save`
@@ -31,23 +31,23 @@ Suids are IDs that are:
 
 ## Example
 ```xml
-<script src="//cdn.rawgit.com/download/suid/0.9.8/dist/suid.min.js" 
+<script src="//cdn.rawgit.com/download/suid/0.9.9/dist/suid.min.js" 
 		data-suid-server="suid/suid.json"></script>
 ```
 Later on:
 ```javascript
 var myId = Suid();
-alert(myId);             // 14shd
-alert(myId.valueOf());   // 1204748
+alert(myId);             // 14she
+alert(myId.valueOf());   // 1903154
 var halve = myId / 2;
 var halveId = new Suid(halve);
-alert(halve);            // 602374
-alert(halveId);          // jd86
+alert(halve);            // 951577
+alert(halveId);          // ke8p
 var src = {id: myId, name: 'test'};
 var json = JSON.stringify(src);
-alert(json);             // '{"id":"suid:14shd","name":"test"}
+alert(json);             // '{"id":"suid:14she","name":"test"}
 var dst = JSON.parse(json, Suid.revive);
-alert(dst.id);           // 14shd
+alert(dst.id);           // 14she
 ```
 *Don't create new IDs by adding to existing IDs! Just call `Suid()` again.*
 
@@ -57,9 +57,9 @@ Check out the Java EE implementation: [suid-server-java](http://download.github.
 ## Options
 You can specify options by including the `data-suid-options` attribute in the script element an giving a pseudo-json options string, like so:
 ```xml
-<script src="//cdn.rawgit.com/download/suid/0.9.8/dist/suid.min.js" 
+<script src="//cdn.rawgit.com/download/suid/0.9.9/dist/suid.min.js" 
 		data-suid-server="suid/suid.json"
-		data-suid-options="{'min':3, 'max':3}"></script>
+		data-suid-options="{'min':4, 'max':6}"></script>
 ```
 The pseudo-json is basically normal json but with single quotes instead of double.
 
@@ -68,8 +68,8 @@ The suid script fetches suid blocks from the suid server and stores them in a po
 
 You can control the behaviour of the pool with two settings:
   
-* `min`: Minimum number of suid blocks to keep in the pool, defaults to 2
-* `max`: Maximum number of suid blocks to keep in the pool, defaults to 2
+* `min`: Minimum number of suid blocks to keep in the pool, defaults to 3
+* `max`: Maximum number of suid blocks to keep in the pool, defaults to 4
 
 Option `min` determines how low the amount of blocks in the pool may become before the script will request new blocks from the server. Option `max` determines how many blocks the script will fetch during each request in order to fill the pool up again. If your application has moments in which it consumes a lot of IDs in a short timeframe, or if your application is expected to be used offline for prolonged periods, choose a `min` that ensures enough IDs will always be in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks (at the expense of more ID blocks going wasted when caches are cleared etc) choose a `max` that is a number of blocks higher then your `min`.
 
@@ -77,7 +77,7 @@ At most 8 blocks can be requested from the pool simultaneously so bear this in m
 
 ## API documentation
 	
-Please refer to the [Suid JS API documentation](https://cdn.rawgit.com/download/suid/0.9.8/doc/ws.suid.Suid.html) 
+Please refer to the [Suid JS API documentation](https://cdn.rawgit.com/download/suid/0.9.9/doc/ws.suid.Suid.html) 
 for details on the API.
 
 ## Why Suids?
@@ -108,16 +108,16 @@ built Suid.
 
 ### Distributed but coordinated
 Suids are coordinated by a central server. The server hands out ID blocks, each of
-which allows an ID generator to generate up to 256 IDs without any further need
+which allows an ID generator to generate up to 32 IDs without any further need
 for communication with the server. It's implementation is inspired by 
 [the mechanism Flickr uses](http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/)
 for generating their IDs. Flickr however serves IDs one at a time, whereas Suid
-servers hand out IDs in blocks of 256 to minimize network overhead and facilitate
+servers hand out IDs in blocks of 32 to minimize network overhead and facilitate
 longer periods of offline usage.
 
 ### Short
-Suids fit in 53-bits, which means they can be treated as a native number in all
-major programming languages, including PHP and Javascript. And because they are
+Suids fit in 53-bits, which means they can be treated as a native integer number in 
+all major programming languages, including PHP and Javascript. And because they are
 ordered, they start out *very* short and only grow longer as time goes by and
 more and more of them are issued. They will never become longer than 11 characters.
 Here is an example of the length of the ID as more and more IDs get issued:
@@ -138,13 +138,13 @@ The total ID space of a suid can contain `9,007,199,254,740,992` or
 9 quadrillion, 7 trillion, 199 billion, 254 million, 740 thousand 992 IDs.  :)
 
 ### Sweet
-The default representation of a Suid uses 36 different symbols (`0..9a..z`) and are easy
-for humans to read, write and pronounce, as well as URL-safe.
+The default representation of a Suid uses base-36, an alphabet with 36 different symbols 
+(`0..9a..z`), and are easy for humans to read, write and pronounce, as well as URL-safe.
 Using (only lowercase!) letters in addition to the decimals actually makes the IDs easier
 for humans to work with, Just compare:
 
-	14shd
-	1204748
+	14she
+	1903154
 
 Especially when having to read an ID to someone over the phone, adding in uppercase letters
 and special symbols such as dash `-`, tilde `~` and underscore `_` makes the process very
@@ -156,43 +156,28 @@ The 53 bits in a suid are distributed over a 64-bit long as depicted below:
 	                 HIGH INT                                         LOW INT
 	 _______________________________________________________________________________________________
 	|                                               |                                               |
-	| 0000 0000 | 000b bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbii | iiii iiss |
+	| 0000 0000 | 000b bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | biii iiss |
 	|_______________________________________________|_______________________________________________|
 	
 	0 = 11 reserved bits
-	b = 43 block bits
-	i = 8 ID bits
+	b = 46 block bits
+	i = 5 ID bits
 	s = 2 shard bits
 
-The first 11 bits are reserved and always set to `0`. The next 43 bits are used for
-the `block` number. These are handed out by a centralized server. Then there are 8 `ID`
+The first 11 bits are reserved and always set to `0`. The next 46 bits are used for
+the `block` number. These are handed out by a centralized server. Then there are 5 `ID`
 bits which are to be filled in by the generator. The last 2 bits are reserved for the `shard`
 ID. To prevent a single point of failure, up to 4 individual hosts can be handing out 
 ID's for a certain domain, each with their own `shard` ID.
 
 To make the String representation of suids both short and easy for humans to read, write 
-and pronounce, an encoding scheme is used based on the alphanumerals [a-z,0-9] as follows: 
+and pronounce, the base-36 encoding scheme is used based on the alphanumerals [a-z,0-9].
 
-	0123456789a c defghijk mn p rstuvwxyz  = 32 character alphabet
-	             ^         ^  ^ ^ 
-	             b         l  o q
-	
-	bloq = 4 Replacement symbols:
-		b = 00
-		l = 01
-		o = 02
-		q = 03
-
-Using only lowercase the alphanumerals give us 36 individual tokens in our alphabet. 
-To make things simpler, we take out 4 characters and use them as replacement symbols 
-instead: `'b'`, `'l'`, `'o'` and `'q'`.
-Now we end up with a 32 token alphabet, neatly encoding 5 bits per token.
-
-We can use the replacement symbols to perform some 'compression'. Using the fact 
-that all blocks will end with the characters `'00'`, `'01'`, `'02'` or `'03'` 
-(for shards 0 .. 3) we can save one character off any block suid by replacing the 
-character sequence by it's corresponding replacement symbol. This at the same time 
-uniquely marks a suid as a block suid.
+When encoded to JSON, suids are represented as strings with the prefix `'Suid:'`, 
+e.g.: `'Suid:14she'`. The API offers [toJSON](https://cdn.rawgit.com/download/suid/0.9.9/doc/ws.suid.Suid.html#toJSON) and 
+[fromJSON](https://cdn.rawgit.com/download/suid/0.9.9/doc/ws.suid.Suid.html#.Suid.fromJSON)
+methods, as well as a [revive](//cdn.rawgit.com/download/suid/0.9.9/doc/ws.suid.Suid.html#.Suid.revive) 
+function to aid in the serialization process.
 
 ## Copyright
 Copyright (c) 2015 by [Stijn de Witt](http://StijnDeWitt.com). Some rights reserved.
