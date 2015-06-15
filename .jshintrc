@@ -12,7 +12,7 @@
 	"trailing": true,
 	"undef": true,
 	"unused": true,
-
+	"newcap": false,
 	"browser": true,
 
 	"globals": {

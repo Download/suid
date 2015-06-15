@@ -75,11 +75,12 @@
 	 *              Only used when called as a constructor.
 	 * 
 	 * @class Suid
-	 * @memberof ws.suid 
+	 * @memberof! ws.suid
 	 */
 	var Suid = (function() {
 		
 		function Suid(value) {
+			if (! (this instanceof Suid)) {return new Suid(value);}
 			if (value === undefined) {return Suid.next();}
 			if (typeof value === 'string') {value = Suid.fromString(value);}
 			this.value = value instanceof Suid ? value.value : value;
@@ -87,6 +88,11 @@
 		}
 		
 		Suid.prototype = Object.create(Number.prototype);
+		
+		/**
+		 * Constant for a suid with a value of zero (0).
+		 */
+		Suid.NULL = Suid(0);
 		
 		/** 
 		 * Converts this suid to a base-36 string.

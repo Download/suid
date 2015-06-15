@@ -1,6 +1,6 @@
 {
   "name": "suid",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "main": "src/suid.js",
   "ignore": [".jshintrc"],
   "dependencies": {}
