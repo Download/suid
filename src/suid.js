@@ -7,9 +7,12 @@
  * @Copyright (c) 2015. Some rights reserved. 
  * @License CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) 
  */
-/* jshint browser:true, shadow:true, devel:true */
 /** @namespace ws.suid */
-(function(){
+(function (u,m,d) {
+    if (typeof define === 'function' && define.amd) {define(d);} 
+    else if (typeof exports === 'object') {module.exports = d();} 
+    else {u[m] = d();}
+}(this, 'Suid', function(){
 	'use strict';
 	
 	var PREFIX = 'Suid:',
@@ -30,15 +33,11 @@
 		ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 	
 	var localStorageSupported = (function(ls){try{ls.setItem(DETECT, DETECT);ls.removeItem(DETECT);return true;}catch(e){return false;}})(localStorage),
-		log = window.console && console.error,
+		log = ('console' in window) && console.error && console.warn,
 		currentBlock,
 		currentId,
-		options = getOptions(),
-		settings = {
-			url: options.url,
-			min: options.min || 3,
-			max: options.max || 4
-		};
+		readyListeners = [],
+		config = getConfig();
 
 	/**
 	 * Distributed Service-Unique IDs that are short and sweet.
@@ -260,8 +259,9 @@
 		 */
 		Suid.next = function Suid_next() {
 			var pool = Pool.get();
-			if ((pool.length < settings.min) || ((!currentBlock && pool.length === settings.min))) {
-				Server.fetch();
+			if ((pool.length < config.min) || ((!currentBlock && pool.length === config.min))) {
+				if (config.server) {Server.fetch();}
+				else if (log) {console.warn('No suid server configured. Please add the data-suid-server attribute to the script tag or call Suid.config before generating IDs.');}
 			}
 			if (! currentBlock) {
 				if (pool.length === 0) {
@@ -279,6 +279,87 @@
 			}
 			return new Suid(result);
 		};
+		
+		/**
+		 * Configures the suid generator and gets the current config.
+		 * 
+		 * <p>This method can be used as an alternative for, or in addition to, specifying
+		 * the configuration in the <code>data-suid-server</code> and <code>data-suid-options</code>
+		 * script attributes.</p>
+		 * 
+		 * <p><b>Examples:</b></p>
+		 * 
+		 * <code><pre>
+		 * // Assuming no config was set through script tag attributes...
+		 * var config = Suid.config();       // config => {server:'', min:3, max:4}  (defaults)
+		 * 
+		 * Suid.config({
+		 *     server: '/suid/suid.json',
+		 *     min: 5,
+		 *     max: 6
+		 * });
+		 * 
+		 * var config = Suid.config();       // config => {server:'/suid/suid.json', min:5, max:6}
+		 * 
+		 * config = Suid.config({max: 8});   // config => {server:'/suid/suid.json', min:5, max:8}
+		 * </pre></code> 
+		 * 
+		 * @return The current config after the given <code>cfg</code> object has been processed (if any).
+		 * 
+		 * @memberof! ws.suid.Suid
+		 */
+		Suid.config = function Suid_config(cfg) {
+			if (cfg) {
+				config.server = cfg.server || config.server;
+				config.min = cfg.min || config.min;
+				config.max = cfg.max || config.max;
+			}
+			Suid.ready();
+			return cfg ? this : config;
+		};
+		
+		/**
+		 * Indicates if Suid is ready to generate IDs, attaches the given callback listener.
+		 * 
+		 * <p>This method can be used to find out whether Suid is ready to generate ID's, or
+		 * to attach an event listener to the ready event. The given <code>callback</code> function
+		 * is guaranteed to fire asynchronously, meaning this method will always return before
+		 * the callback is fired. Due to this, this method may already return <code>true</code> even
+		 * though the ready event hasn't fired yet.</p>
+		 * 
+		 * <p><b>Examples:</b></p>
+		 * 
+		 * <code><pre>
+		 * if (Suid.ready()) {
+		 *   // Suid is ready!
+		 * } else {
+		 *   // Suid is not ready yet...
+		 * }
+		 * 
+		 * Suid.ready(function(){
+		 *   // Suid is ready!
+		 * });
+		 * </pre></code>
+		 * 
+		 * @param callback The optional callback function that will be called once Suid is ready.
+		 * @return <code>true</code> if Suid is ready, <code>false</code> otherwise.
+		 */
+		Suid.ready = function(callback) {
+			var ready = !!config.server && Pool.get().length > 0;
+			if (callback) {readyListeners.push(callback);}
+			if (ready) {
+				setTimeout(function(){
+					for (var listener; listener=readyListeners.shift(); ) {
+						listener();
+					}
+				}, 4);
+			}
+			else if (config.server) {
+				Server.fetch();
+			}
+			return ready;
+		};
+		
 		return Suid;
 	})();
 
@@ -323,27 +404,27 @@
 			var pool = Pool.get();
 			pool.push(JSON.parse(text));
 			Pool.set(pool);
+			Suid.ready();
 		}
 		
 		function handleError(status, request) {
 			// status code 5xx ? possibly recoverable.
 			switch(status) {
-				case 500: // Internal server error... hopefully a glitch? retry.
-				case 502: // Bad Gateway... hopefully a glitch? retry.
-				case 503: // Service unavailable... hopefully temporary? retry.
-				case 504: // Gateway Timeout... hopefully temporary? retry.
+				case 500: // Internal server error
+				case 502: // Bad Gateway
+				case 503: // Service unavailable
+				case 504: // Gateway Timeout
 					retry(request);
 					break;
 				default: // unrecoverable? give up 
 					if (log) {console.error('Unable to fetch suid data from server. ', request, status);}
 					retries = 0;
-					started = 0;
 			}
 		}
 		
 		function retry(request) {
 			if (retries === 0) {
-				if (log) {console.error('Giving up fetching suid data after 5 attempts to fetch from server url: ' + settings.url);}
+				if (log) {console.error('Giving up fetching suid data after 5 attempts to fetch from server: ' + config.server);}
 				return;
 			}
 			
@@ -364,17 +445,17 @@
 			}
 			if (currentId > (IDSIZE/2)) { // less than half of current block left
 				if (after > 30000) {
-					after = 30000; // 0.5 min
+					after = 30000; // 30 sec
 				}
 			}
 			if (! currentBlock) { // completely out
-				if (after > 1000) {
-					after = 1000; // 1 sec
+				if (after > 2000) {
+					after = 2000; // 2 sec
 				}
 			}
 			
 			setTimeout(function(){
-				ajax(settings.url, {blocks: settings.max - Pool.get().length}, handleSuccess, handleError);
+				ajax(config.server, {blocks: config.max - Pool.get().length}, handleSuccess, handleError);
 			}, after);
 		}
 
@@ -405,40 +486,41 @@
 					return; // already fetching and still recent or not urgent
 				} 
 				var pool = Pool.get();
-				if (pool.length < settings.min) {
+				if (pool.length < config.min) {
 					retries = 3;
 					started = Date.now();
-					ajax(settings.url, {blocks: settings.max - pool.length}, handleSuccess, handleError);
+					ajax(config.server, {blocks: config.max - pool.length}, handleSuccess, handleError);
 				}
 			}
 		};
 	})();
 
-	function getOptions() {
-		var options = {};
+	function getConfig() {
+		var config = {server: '', min: 3, max: 4};
 		var script = document.querySelector('script[data-suid-server]');
-		if (! script) {
-			if (log) {console.error('Attribute `data-suid-server` not found on any script element. Unable to fetch suids from the server.');}
-			return options;
-		}
+		if (! script) {script = document.querySelector('script[data-suid-options]');}
+		if (! script) {return config;}
+
 		var url = script.getAttribute('data-suid-server'),
-			attr = script.getAttribute('data-suid-options');
-		
+			attr = script.getAttribute('data-suid-options'),
+			options;
 		if (attr) {
 			try {
 				options = JSON.parse(attr.split('\'').join('"'));
 			}
 			catch(error) {
 				if (log) {console.error('Unable to parse suid options as JSON: \'' + attr + '\'. Error was: ', error);}
+				return config;
 			}
 		}
-		options.url = url;
-		return options;
+		if (url) {config.server = url;}
+		if (options && options.min) {config.min = options.min;}
+		if (options && options.max) {config.max = options.max;}
+		return config;
 	}
 	
-	// Fetch initial data from the server if needed
-	Server.fetch();
+	Suid.ready();
 	
 	// EXPOSE
-	window.Suid = Suid;
-})();
+	return Suid;
+}));

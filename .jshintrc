@@ -14,11 +14,11 @@
 	"unused": true,
 	"newcap": false,
 	"browser": true,
-
+	"shadow": true,
+	"devel": true,
+	
 	"globals": {
-		"_": false,
-		"Backbone": false,
-		"jQuery": false,
-		"wp": false
+		"define": false,
+		"module": false
 	}
 }
