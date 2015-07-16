@@ -80,13 +80,13 @@
 		
 		function Suid(value) {
 			if (! (this instanceof Suid)) {return new Suid(value);}
-			if (value === undefined) {return Suid.next();}
+			if (value === undefined) {value = 0;}
 			if (typeof value === 'string') {value = Suid.fromString(value);}
 			this.value = value instanceof Suid ? value.value : value;
-			Number.call(this, this.value);
-		}
+			Number.call(this, this.value);		}
 		
 		Suid.prototype = Object.create(Number.prototype);
+		Suid.prototype.constructor = Suid;
 		
 		/**
 		 * Constant for a suid with a value of zero (0).
@@ -147,7 +147,7 @@
 		 * @see {@link ws.suid.Suid#toString}
 		 */
 		Suid.fromString = function Suid_fromString(str) {
-			return new Suid(parseInt(str, 36)); // Suid.fromBase32(Suid.decompress(str));
+			return new Suid(parseInt(str, 36));
 		};
 		
 		/**
@@ -424,7 +424,7 @@
 		
 		function retry(request) {
 			if (retries === 0) {
-				if (log) {console.error('Giving up fetching suid data after 5 attempts to fetch from server: ' + config.server);}
+				if (log) {console.error('Giving up fetching suid data from server: ' + config.server);}
 				return;
 			}
 			
