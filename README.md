@@ -36,7 +36,7 @@ Suids are IDs that are:
 ```
 Later on:
 ```javascript
-var myId = Suid();
+var myId = Suid.next();
 alert(myId);             // 14she
 alert(myId.valueOf());   // 1903154
 var halve = myId / 2;
