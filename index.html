@@ -29,7 +29,7 @@
     <div class="container">
       <section id="main_content">
         <h1>
-<a id="suid-v0911" class="anchor" href="#suid-v0911" aria-hidden="true"><span class="octicon octicon-link"></span></a>suid v0.9.11</h1>
+<a id="suid-v0912" class="anchor" href="#suid-v0912" aria-hidden="true"><span class="octicon octicon-link"></span></a>suid v0.9.12</h1>
 
 <p><strong>Distributed Service-Unique IDs that are short and sweet.</strong></p>
 
@@ -47,11 +47,11 @@
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
-<li>Commented (~7kB): <a href="https://github.com/Download/suid/releases/download/0.9.11/suid.js">suid.js</a>
+<li>Commented (~7kB): <a href="https://github.com/Download/suid/releases/download/0.9.12/suid.js">suid.js</a>
 </li>
-<li>Minified (~3 KB): <a href="https://github.com/Download/suid/releases/download/0.9.11/suid.min.js">suid.min.js</a>
+<li>Minified (~3 KB): <a href="https://github.com/Download/suid/releases/download/0.9.12/suid.min.js">suid.min.js</a>
 </li>
-<li>Map file: <a href="https://github.com/Download/suid/releases/download/0.9.11/suid.min.js.map">suid.min.js.map</a>
+<li>Map file: <a href="https://github.com/Download/suid/releases/download/0.9.12/suid.min.js.map">suid.min.js.map</a>
 </li>
 </ul>
 
@@ -59,11 +59,11 @@
 <a id="cdn" class="anchor" href="#cdn" aria-hidden="true"><span class="octicon octicon-link"></span></a>CDN</h2>
 
 <ul>
-<li>Commented: <code>//cdn.rawgit.com/download/suid/0.9.11/dist/suid.js</code>
+<li>Commented: <code>//cdn.rawgit.com/download/suid/0.9.12/dist/suid.js</code>
 </li>
-<li>Minified : <code>//cdn.rawgit.com/download/suid/0.9.11/dist/suid.min.js</code>
+<li>Minified : <code>//cdn.rawgit.com/download/suid/0.9.12/dist/suid.min.js</code>
 </li>
-<li>Map file : <code>//cdn.rawgit.com/download/suid/0.9.11/dist/suid.min.js.map</code>
+<li>Map file : <code>//cdn.rawgit.com/download/suid/0.9.12/dist/suid.min.js.map</code>
 </li>
 </ul>
 
@@ -87,12 +87,12 @@
 <h2>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.11/dist/suid.min.js<span class="pl-pds">"</span></span> 
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.12/dist/suid.min.js<span class="pl-pds">"</span></span> 
         <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
 <p>Later on:</p>
 
-<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> myId <span class="pl-k">=</span> Suid();
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> myId <span class="pl-k">=</span> Suid.<span class="pl-c1">next</span>();
 <span class="pl-c1">alert</span>(myId);             <span class="pl-c">// 14she</span>
 <span class="pl-c1">alert</span>(myId.<span class="pl-c1">valueOf</span>());   <span class="pl-c">// 1903154</span>
 <span class="pl-k">var</span> halve <span class="pl-k">=</span> myId / <span class="pl-c1">2</span>;
@@ -117,7 +117,7 @@
 
 <p>You can specify options by including the <code>data-suid-options</code> attribute in the script element an giving a pseudo-json options string, like so:</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.11/dist/suid.min.js<span class="pl-pds">"</span></span> 
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.12/dist/suid.min.js<span class="pl-pds">"</span></span> 
         <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>
         <span class="pl-e">data-suid-options</span>=<span class="pl-s"><span class="pl-pds">"</span>{'min':4, 'max':6}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
@@ -144,7 +144,7 @@
 <h2>
 <a id="api-documentation" class="anchor" href="#api-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>API documentation</h2>
 
-<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.9.11/doc/ws.suid.Suid.html">Suid JS API documentation</a> 
+<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.9.12/doc/ws.suid.Suid.html">Suid JS API documentation</a> 
 for details on the API.</p>
 
 <h2>
@@ -251,9 +251,9 @@ ID. To prevent a single point of failure, up to 4 individual hosts can be handin
 ID's for a certain domain, each with their own <code>shard</code> ID.</p>
 
 <p>When encoded to JSON, suids are represented as strings with the prefix <code>'Suid:'</code>, 
-e.g.: <code>'Suid:14she'</code>. The API offers <a href="https://cdn.rawgit.com/download/suid/0.9.11/doc/ws.suid.Suid.html#toJSON">toJSON</a> and 
-<a href="https://cdn.rawgit.com/download/suid/0.9.11/doc/ws.suid.Suid.html#.Suid.fromJSON">fromJSON</a>
-methods, as well as a <a href="//cdn.rawgit.com/download/suid/0.9.11/doc/ws.suid.Suid.html#.Suid.revive">revive</a> 
+e.g.: <code>'Suid:14she'</code>. The API offers <a href="https://cdn.rawgit.com/download/suid/0.9.12/doc/ws.suid.Suid.html#toJSON">toJSON</a> and 
+<a href="https://cdn.rawgit.com/download/suid/0.9.12/doc/ws.suid.Suid.html#.Suid.fromJSON">fromJSON</a>
+methods, as well as a <a href="//cdn.rawgit.com/download/suid/0.9.12/doc/ws.suid.Suid.html#.Suid.revive">revive</a> 
 function to aid in the serialization process.</p>
 
 <h2>
