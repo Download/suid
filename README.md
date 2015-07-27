@@ -49,7 +49,8 @@ alert(json);             // '{"id":"suid:14she","name":"test"}
 var dst = JSON.parse(json, Suid.revive);
 alert(dst.id);           // 14she
 ```
-*Don't create new IDs by adding to existing IDs! Just call `Suid()` again.*
+*Don't create new IDs by adding to existing IDs!<br>
+ Just call `Suid.next()` again.*
 
 ## Need a server? 
 Check out the Java EE implementation: [suid-server-java](http://download.github.io/suid-server-java/)
