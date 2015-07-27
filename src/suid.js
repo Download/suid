@@ -42,7 +42,7 @@
 	/**
 	 * Distributed Service-Unique IDs that are short and sweet.
 	 *  
-	 * <p>When called without arguments, generates a new Suid.</p> 
+	 * <p>When called without arguments, defaults to <code>Suid(0)</code>.</p> 
 	 * 
 	 * <p>When called with an argument, constructs a new Suid based
 	 * on the given value, which may be either a:</p>
@@ -50,28 +50,28 @@
 	 * <ul>
 	 *   <li>Number</li>
 	 *   <li>Base-36 String</li>
+	 *   <li>JSON string</li>
 	 *   <li>Other Suid</li>
 	 * </ul>
 	 * 
 	 * <p><b>Examples</b></p>
 	 * 
 	 * <big><pre>
-	 * // call without arguments to get the next id
-	 * var id1 = Suid();  // or,
-	 * var id2 = new Suid();
-	 * // this is equivalent to
-	 * var id3 = Suid.next();
+	 * // Call Suid.next() get the next id
+	 * var id = Suid.next(); 
 	 * 
 	 * // call with a Number argument
 	 * var ZERO = Suid(0);
 	 * var ONE = new Suid(1);
 	 * 
 	 * // call with a base-36 string argument
-	 * var suid = new Suid('14she');
+	 * var suid = Suid('14she');
+	 *
+	 * // call with a JSON string of a suid
+	 * var revived = Suid('Suid:14she');
 	 * </pre></big>
 	 * 
 	 * @param value The Number or String value for the new Suid.
-	 *              Only used when called as a constructor.
 	 * 
 	 * @class Suid
 	 * @memberof! ws.suid
@@ -81,18 +81,19 @@
 		function Suid(value) {
 			if (! (this instanceof Suid)) {return new Suid(value);}
 			if (value === undefined) {value = 0;}
-			if (typeof value === 'string') {value = Suid.fromString(value);}
+			if (typeof value === 'string') {value = Suid.looksValidJSON(value) ? Suid.fromJSON(value) : Suid.fromString(value);}
 			this.value = value instanceof Suid ? value.value : value;
-			Number.call(this, this.value);		}
-		
+			Number.call(this, this.value);
+		}
+
 		Suid.prototype = Object.create(Number.prototype);
 		Suid.prototype.constructor = Suid;
-		
+
 		/**
 		 * Constant for a suid with a value of zero (0).
 		 */
 		Suid.NULL = Suid(0);
-		
+
 		/** 
 		 * Converts this suid to a base-36 string.
 		 * 
@@ -103,7 +104,7 @@
 		Suid.prototype.toString = function Suid_toString() {
 			return this.value.toString(36); 
 		};
-		
+
 		/** 
 		 * Converts this suid to a JSON string.
 		 * 
@@ -125,7 +126,7 @@
 		Suid.prototype.toJSON = function Suid_toJSON() {
 			return PREFIX + this.toString();
 		};
-		
+
 		/**
 		 * Returns the underlying value of this suid.
 		 * 
@@ -136,7 +137,7 @@
 		Suid.prototype.valueOf = function Suid_valueOf() {
 			return this.value;
 		};
-		
+
 		/**
 		 * Creates a new suid from the given string.
 		 * 
@@ -149,7 +150,7 @@
 		Suid.fromString = function Suid_fromString(str) {
 			return new Suid(parseInt(str, 36));
 		};
-		
+
 		/**
 		 * Creates a new suid from the given JSON.
 		 * 
@@ -164,7 +165,7 @@
 			if (!json.indexOf(PREFIX)) {json = json.substr(PREFIX.length);}
 			return Suid.fromString(json);
 		};
-		
+
 		/**
 		 * Indicates whether the given string value looks like a valid suid.
 		 * 
@@ -195,7 +196,7 @@
 			}
 			return true;
 		};
-		
+
 		/**
 		 * Indicates whether the given JSON value looks like a valid suid.
 		 * 
@@ -248,8 +249,7 @@
 			}
 			return value;
 		};
-		
-		
+
 		/**
 		 * Generates the next suid.
 		 * 
@@ -271,7 +271,7 @@
 				currentBlock = pool.splice(0, 1)[0];
 				Pool.set(pool);
 			}
-			
+
 			var result = currentBlock + currentId * SHARDSIZE;
 			currentId++;
 			if (currentId >= IDSIZE) {
@@ -279,7 +279,7 @@
 			}
 			return new Suid(result);
 		};
-		
+
 		/**
 		 * Configures the suid generator and gets the current config.
 		 * 
@@ -317,7 +317,7 @@
 			Suid.ready();
 			return cfg ? this : config;
 		};
-		
+
 		/**
 		 * Indicates if Suid is ready to generate IDs, attaches the given callback listener.
 		 * 
@@ -359,7 +359,7 @@
 			}
 			return ready;
 		};
-		
+
 		return Suid;
 	})();
 
@@ -394,11 +394,11 @@
 			}
 		};
 	})();
-	
+
 	var Server = (function(){
 		var retries = 0,
 			started = 0;
-		
+
 		function handleSuccess(text) {
 			retries = 0;
 			var pool = Pool.get();
@@ -406,7 +406,7 @@
 			Pool.set(pool);
 			Suid.ready();
 		}
-		
+
 		function handleError(status, request) {
 			// status code 5xx ? possibly recoverable.
 			switch(status) {
@@ -421,13 +421,13 @@
 					retries = 0;
 			}
 		}
-		
+
 		function retry(request) {
 			if (retries === 0) {
 				if (log) {console.error('Giving up fetching suid data from server: ' + config.server);}
 				return;
 			}
-			
+
 			retries--;
 			var after = 300000; // 5 minutes
 			var retryAfter = request.getResponseHeader('Retry-After');
@@ -518,9 +518,9 @@
 		if (options && options.max) {config.max = options.max;}
 		return config;
 	}
-	
+
 	Suid.ready();
-	
+
 	// EXPOSE
 	return Suid;
 }));
