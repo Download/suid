@@ -1,7 +1,13 @@
 {
-  "name": "suid",
-  "version": "0.9.14",
+  "name": "ws.suid",
+  "version": "0.9.15",
   "description": "Distributed Service-Unique IDs that are short and sweet.",
+  "main": "src/suid.js",
+  "dist": {
+	"min": "dist/suid.min.js",
+	"map": "dist/suid.min.js.map"
+  },
+  "exports": ["Suid"],
   "repository": {
     "type": "git",
     "url": "git://github.com/Download/suid.git"
@@ -12,7 +18,10 @@
     "url": "http://StijnDeWitt.com"
   },
   "contributors": [],
-  "license": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)",
+  "copyright": "Copyright 2015 by [Stijn de Witt](http://StijnDeWitt.com). Some rights reserved.",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "homepage": "https://download.github.io/suid",
   "devDependencies": {
     "grunt": "~0.4.5",
     "load-grunt-tasks": "~1.0.0",

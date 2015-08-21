@@ -1,28 +1,28 @@
 module.exports = function(grunt) {
 	require('load-grunt-tasks')(grunt);
 	
+	var pkg = grunt.file.readJSON('package.json');
 	grunt.initConfig({
-		version: grunt.file.readJSON('package.json').version,
-		pkg: grunt.file.readJSON('package.json'),
+		pkg: pkg,
 
 		jshint: {
 			options : {
 				jshintrc : '.jshintrc'
 			},
-			all: [ 'src/suid.js' ]
+			all: [ '<%= pkg.main %>' ]
 		},
 
 		uglify: {
 			options:{
-				banner : '/*! [Suid <%= version %>](http://download.github.io/suid) copyright 2015 by [Stijn de Witt](http://StijnDeWitt.com), some rights reserved. Licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) */',
+				banner : '/*! [<%= pkg.name %> <%= pkg.version %>](<%= pkg.homepage %>). <%= pkg.copyright %> License: [<%= pkg.license %>](<%= pkg.licenseUrl %>) */',
 				mangle: {
-					except: ['Suid', 'u','m','d']
+					except: pkg.exports.concat(['u','m','d'])
 				},
 				sourceMap: true
 			},
 			admin: {
 				files: {
-					'dist/suid.min.js': [ 'src/suid.js']
+					'<%= pkg.dist.min %>': ['<%= pkg.main %>']
 				}
 			}
 		},

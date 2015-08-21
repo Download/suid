@@ -1,24 +1,25 @@
-# suid v0.9.14
+# ws.suid <sub><sup>v0.9.15</sup></sub>
 **Distributed Service-Unique IDs that are short and sweet.**
 [project website](http://download.github.io/suid/)
 
 Suids are IDs that are:
 
-* Unique across a service or site
 * Short
+* Unique across a service or site
 * Ordered
 * Easy for humans to read, write and pronounce
 * 53 bits so they fit into a single Javascript or PHP Number, Java Long, SQL BigInt etc.
+* Sweet!
 
 ## Download
-* Commented (~7kB): [suid.js](https://github.com/Download/suid/releases/download/0.9.14/suid.js)
-* Minified (~3 KB): [suid.min.js](https://github.com/Download/suid/releases/download/0.9.14/suid.min.js)
-* Map file: [suid.min.js.map](https://github.com/Download/suid/releases/download/0.9.14/suid.min.js.map)
+* Commented (~7kB): [suid.js](https://github.com/Download/suid/releases/download/0.9.15/suid.js)
+* Minified (~3 KB): [suid.min.js](https://github.com/Download/suid/releases/download/0.9.15/suid.min.js)
+* Map file: [suid.min.js.map](https://github.com/Download/suid/releases/download/0.9.15/suid.min.js.map)
 
 ## CDN
-* Commented: `//cdn.rawgit.com/download/suid/0.9.14/dist/suid.js`
-* Minified : `//cdn.rawgit.com/download/suid/0.9.14/dist/suid.min.js`
-* Map file : `//cdn.rawgit.com/download/suid/0.9.14/dist/suid.min.js.map`
+* Commented: `//cdn.rawgit.com/download/suid/0.9.15/dist/suid.js`
+* Minified : `//cdn.rawgit.com/download/suid/0.9.15/dist/suid.min.js`
+* Map file : `//cdn.rawgit.com/download/suid/0.9.15/dist/suid.min.js.map`
 
 ## Bower
 * `bower install download/suid --save`
@@ -31,7 +32,7 @@ Suids are IDs that are:
 
 ## Example
 ```xml
-<script src="//cdn.rawgit.com/download/suid/0.9.14/dist/suid.min.js" 
+<script src="//cdn.rawgit.com/download/suid/0.9.15/dist/suid.min.js" 
 		data-suid-server="suid/suid.json"></script>
 ```
 Later on:
@@ -58,7 +59,7 @@ Check out the Java EE implementation: [suid-server-java](http://download.github.
 ## Options
 You can specify options by including the `data-suid-options` attribute in the script element an giving a pseudo-json options string, like so:
 ```xml
-<script src="//cdn.rawgit.com/download/suid/0.9.14/dist/suid.min.js" 
+<script src="//cdn.rawgit.com/download/suid/0.9.15/dist/suid.min.js" 
 		data-suid-server="suid/suid.json"
 		data-suid-options="{'min':4, 'max':6}"></script>
 ```
@@ -78,7 +79,7 @@ At most 8 blocks can be requested from the pool simultaneously so bear this in m
 
 ## API documentation
 	
-Please refer to the [Suid JS API documentation](https://cdn.rawgit.com/download/suid/0.9.14/doc/ws.suid.Suid.html) 
+Please refer to the [Suid JS API documentation](https://cdn.rawgit.com/download/suid/0.9.15/doc/ws.suid.Suid.html) 
 for details on the API.
 
 ## Why Suids?
@@ -172,14 +173,14 @@ ID. To prevent a single point of failure, up to 4 individual hosts can be handin
 ID's for a certain domain, each with their own `shard` ID.
 
 When encoded to JSON, suids are represented as strings with the prefix `'Suid:'`, 
-e.g.: `'Suid:14she'`. The API offers [toJSON](https://cdn.rawgit.com/download/suid/0.9.14/doc/ws.suid.Suid.html#toJSON) and 
-[fromJSON](https://cdn.rawgit.com/download/suid/0.9.14/doc/ws.suid.Suid.html#.Suid.fromJSON)
-methods, as well as a [revive](//cdn.rawgit.com/download/suid/0.9.14/doc/ws.suid.Suid.html#.Suid.revive) 
+e.g.: `'Suid:14she'`. The API offers [toJSON](https://cdn.rawgit.com/download/suid/0.9.15/doc/ws.suid.Suid.html#toJSON) and 
+[fromJSON](https://cdn.rawgit.com/download/suid/0.9.15/doc/ws.suid.Suid.html#.Suid.fromJSON)
+methods, as well as a [revive](//cdn.rawgit.com/download/suid/0.9.15/doc/ws.suid.Suid.html#.Suid.revive) 
 function to aid in the serialization process.
 
 ## Copyright
 Copyright (c) 2015 by [Stijn de Witt](http://StijnDeWitt.com). Some rights reserved.
 
 ## License
-Creative Commons Attribution 4.0 International (CC BY 4.0)
-https://creativecommons.org/licenses/by/4.0/
+[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
+
