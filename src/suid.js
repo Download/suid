@@ -137,6 +137,23 @@
 		Suid.prototype.valueOf = function Suid_valueOf() {
 			return this.value;
 		};
+		
+		
+		Suid.prototype.compare = function Suid_compare(that) {
+			that = new Suid(that);
+			return this.value < that.value ? -1 : this.value > that.value ? 1 : 0;
+		};
+		
+		/**
+		 * Returns the underlying value of this suid.
+		 * 
+		 * @return The underlying primitive Number value.
+		 * 
+		 * @memberof! ws.suid.Suid#
+		 */
+		Suid.prototype.equals = function Suid_equals(that) {
+			return this.value === new Suid(that).value;
+		};
 
 		/**
 		 * Creates a new suid from the given string.
