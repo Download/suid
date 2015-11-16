@@ -101,7 +101,7 @@ Suid.configure({server:'/suid/suid.json', min:4, max:6, seed:['14she', '14sky']}
 ```
 
 ### Seed option
-The seed option allows you to pre-configure suid.js with the first suid blocks,
+The `seed` option allows you to pre-configure suid.js with the first suid blocks,
 so it will be able to generate ID's right away. If you don't provide seed blocks,
 and no suid blocks are in the pool in localstorage, suid.js will fire an Ajax 
 request right away to fetch the first blocks. This does however cause some latency
@@ -109,6 +109,11 @@ and a small period in which suid.js will not be able to serve any IDs.
 
 To provide seed blocks, we generate suid blocks on the server on the first request
 and pass them to suid.js in option `seed`, using any of the methods discussed above.
+
+E.g.:
+```js
+Suid.configure({seed: ['14she', '14sky']}); 
+```
 
 ### Suid pool options
 The suid script fetches suid blocks from the suid server and stores them in a pool in 
