@@ -29,10 +29,10 @@
     <div class="container">
       <section id="main_content">
         <h1>
-<a id="wssuid-v0916" class="anchor" href="#wssuid-v0916" aria-hidden="true"><span class="octicon octicon-link"></span></a>ws.suid <sub><sup>v0.9.16</sup></sub>
+<a id="wssuid-v0100" class="anchor" href="#wssuid-v0100" aria-hidden="true"><span class="octicon octicon-link"></span></a>ws.suid <sub><sup>v0.10.0</sup></sub>
 </h1>
 
-<p><strong>Distributed Service-Unique IDs that are short and sweet.</strong></p>
+<p><strong>Distributed Service-Unique IDs that are short and sweet.</strong> </p>
 
 <p>Suids are IDs that are:</p>
 
@@ -49,11 +49,11 @@
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
-<li>Commented (~7kB): <a href="https://github.com/Download/suid/releases/download/0.9.16/suid.js">suid.js</a>
+<li>Commented (~7kB): <a href="https://github.com/Download/suid/releases/download/0.10.0/suid.js">suid.js</a>
 </li>
-<li>Minified (~3 KB): <a href="https://github.com/Download/suid/releases/download/0.9.16/suid.min.js">suid.min.js</a>
+<li>Minified (~3 KB): <a href="https://github.com/Download/suid/releases/download/0.10.0/suid.min.js">suid.min.js</a>
 </li>
-<li>Map file: <a href="https://github.com/Download/suid/releases/download/0.9.16/suid.min.js.map">suid.min.js.map</a>
+<li>Map file: <a href="https://github.com/Download/suid/releases/download/0.10.0/suid.min.js.map">suid.min.js.map</a>
 </li>
 </ul>
 
@@ -61,12 +61,19 @@
 <a id="cdn" class="anchor" href="#cdn" aria-hidden="true"><span class="octicon octicon-link"></span></a>CDN</h2>
 
 <ul>
-<li>Commented: <code>//cdn.rawgit.com/download/suid/0.9.16/dist/suid.js</code>
+<li>Commented: <code>//cdn.rawgit.com/download/suid/0.10.0/dist/suid.js</code>
 </li>
-<li>Minified : <code>//cdn.rawgit.com/download/suid/0.9.16/dist/suid.min.js</code>
+<li>Minified : <code>//cdn.rawgit.com/download/suid/0.10.0/dist/suid.min.js</code>
 </li>
-<li>Map file : <code>//cdn.rawgit.com/download/suid/0.9.16/dist/suid.min.js.map</code>
+<li>Map file : <code>//cdn.rawgit.com/download/suid/0.10.0/dist/suid.min.js.map</code>
 </li>
+</ul>
+
+<h2>
+<a id="npm" class="anchor" href="#npm" aria-hidden="true"><span class="octicon octicon-link"></span></a>NPM</h2>
+
+<ul>
+<li><code>npm install --save-dev ws.suid</code></li>
 </ul>
 
 <h2>
@@ -81,18 +88,54 @@
 
 <ul>
 <li>Include suid.js on your webpage</li>
-<li>Configure the URL to the suid server using the <code>data-suid-server</code> attribute</li>
-<li>Pass options to it using the <code>data-suid-options</code> attribute</li>
-<li>Call <code>Suid()</code> to generate IDs</li>
+<li>Configure the URL of the suid server</li>
+<li>Call <code>Suid.next()</code> to generate IDs</li>
+<li>Use options to provide seed data and control pool behavior</li>
 </ul>
 
-<h2>
-<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
+<h3>
+<a id="configure-the-url-of-the-suid-server" class="anchor" href="#configure-the-url-of-the-suid-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure the URL of the suid server</h3>
 
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.16/dist/suid.min.js<span class="pl-pds">"</span></span> 
-        <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+<p>This is the only mandatory configuration. Like all configuration in suid.js, it can be done in three ways:</p>
 
-<p>Later on:</p>
+<ul>
+<li>By setting a script attribute</li>
+<li>By calling <code>Suid.configure(options)</code>
+</li>
+<li>By creating a global configuration object</li>
+</ul>
+
+<h4>
+<a id="by-setting-a-script-attribute" class="anchor" href="#by-setting-a-script-attribute" aria-hidden="true"><span class="octicon octicon-link"></span></a>By setting a script attribute</h4>
+
+<p>You can pass the URL to the suid server right in the script tag by setting
+the attribute <code>data-suid-server</code> to the URL of the server:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.10.0/dist/suid.min.js<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>/suid/suid.json<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<h4>
+<a id="by-calling-suidconfigureoptions" class="anchor" href="#by-calling-suidconfigureoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>By calling <code>Suid.configure(options)</code>
+</h4>
+
+<p>Instead of using script attributes, once suid.js has loaded, you can call
+<code>Suid.configure(options)</code>, where <code>options</code> is an options object:</p>
+
+<div class="highlight highlight-source-js"><pre>Suid.configure({server<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/suid.suid,json<span class="pl-pds">'</span></span>});</pre></div>
+
+<h4>
+<a id="by-creating-a-global-configuration-object" class="anchor" href="#by-creating-a-global-configuration-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>By creating a global configuration object</h4>
+
+<p>Sometimes you want to set your configuration <em>before</em> loading your scripts. Suid.js allows for that.
+If, by the time suid.js is loaded, an object exists in the global scope called <code>Suid</code>, suid.js will
+pick it up and use it to configure itself before replacing it with the <code>Suid</code> function:</p>
+
+<pre><code>&lt;script&gt;var Suid = {server:'/suid/suid.json'};&lt;/script&gt;
+&lt;script src="//cdn.rawgit.com/download/suid/0.10.0/dist/suid.min.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<h3>
+<a id="call-suidnext-to-generate-ids" class="anchor" href="#call-suidnext-to-generate-ids" aria-hidden="true"><span class="octicon octicon-link"></span></a>Call <code>Suid.next()</code> to generate IDs</h3>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> myId <span class="pl-k">=</span> Suid.<span class="pl-c1">next</span>();
 <span class="pl-c1">alert</span>(myId);             <span class="pl-c">// 14she</span>
@@ -103,33 +146,56 @@
 <span class="pl-c1">alert</span>(halveId);          <span class="pl-c">// ke8p</span>
 <span class="pl-k">var</span> src <span class="pl-k">=</span> {id<span class="pl-k">:</span> myId, name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>};
 <span class="pl-k">var</span> json <span class="pl-k">=</span> <span class="pl-c1">JSON</span>.stringify(src);
-<span class="pl-c1">alert</span>(json);             <span class="pl-c">// '{"id":"suid:14she","name":"test"}</span>
-<span class="pl-k">var</span> dst <span class="pl-k">=</span> <span class="pl-c1">JSON</span>.<span class="pl-c1">parse</span>(json, Suid.revive);
+<span class="pl-c1">alert</span>(json);             <span class="pl-c">// '{"id":"14she","name":"test"}'</span>
+<span class="pl-k">var</span> dst <span class="pl-k">=</span> <span class="pl-c1">JSON</span>.<span class="pl-c1">parse</span>(json, Suid.revive(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>));
 <span class="pl-c1">alert</span>(dst.<span class="pl-c1">id</span>);           <span class="pl-c">// 14she</span></pre></div>
 
 <p><em>Don't create new IDs by adding to existing IDs!<br>
  Just call <code>Suid.next()</code> again.</em></p>
 
 <h2>
-<a id="need-a-server" class="anchor" href="#need-a-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Need a server?</h2>
-
-<p>Check out the Java EE implementation: <a href="http://download.github.io/suid-server-java/">suid-server-java</a></p>
-
-<h2>
 <a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h2>
 
-<p>You can specify options by including the <code>data-suid-options</code> attribute in the script element an giving a pseudo-json options string, like so:</p>
+<p>You can specify options by including the <code>data-suid-options</code> attribute in the script element 
+and giving a pseudo-json options string, like so:</p>
 
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.9.16/dist/suid.min.js<span class="pl-pds">"</span></span> 
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.10.0/dist/suid.min.js<span class="pl-pds">"</span></span> 
         <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>
-        <span class="pl-e">data-suid-options</span>=<span class="pl-s"><span class="pl-pds">"</span>{'min':4, 'max':6}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+        <span class="pl-e">data-suid-options</span>=<span class="pl-s"><span class="pl-pds">"</span>{'min':4, 'max':6, 'seed':['14she', '14sky']}<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
 <p>The pseudo-json is basically normal json but with single quotes instead of double.</p>
+
+<p>When using the global configuration object or <code>Suid.configure</code> to specify options instead
+of the script attributes, just add the extra options to the options object:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// Before loading suid.js:</span>
+<span class="pl-k">var</span> Suid <span class="pl-k">=</span> {server<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>/suid/suid.json<span class="pl-pds">'</span></span>, min<span class="pl-k">:</span><span class="pl-c1">4</span>, max<span class="pl-k">:</span><span class="pl-c1">6</span>, seed<span class="pl-k">:</span>[<span class="pl-s"><span class="pl-pds">'</span>14she<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>14sky<span class="pl-pds">'</span></span>]};
+<span class="pl-c">// or after loading suid.js:</span>
+Suid.configure({server<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>/suid/suid.json<span class="pl-pds">'</span></span>, min<span class="pl-k">:</span><span class="pl-c1">4</span>, max<span class="pl-k">:</span><span class="pl-c1">6</span>, seed<span class="pl-k">:</span>[<span class="pl-s"><span class="pl-pds">'</span>14she<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>14sky<span class="pl-pds">'</span></span>]});</pre></div>
+
+<h3>
+<a id="seed-option" class="anchor" href="#seed-option" aria-hidden="true"><span class="octicon octicon-link"></span></a>Seed option</h3>
+
+<p>The <code>seed</code> option allows you to pre-configure suid.js with the first suid blocks,
+so it will be able to generate ID's right away. If you don't provide seed blocks,
+and no suid blocks are in the pool in localstorage, suid.js will fire an Ajax 
+request right away to fetch the first blocks. This does however cause some latency
+and a small period in which suid.js will not be able to serve any IDs.</p>
+
+<p>To provide seed blocks, we generate suid blocks on the server on the first request
+and pass them to suid.js in option <code>seed</code>, using any of the methods discussed above.</p>
+
+<p>E.g.:</p>
+
+<div class="highlight highlight-source-js"><pre>Suid.configure({seed<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>14she<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>14sky<span class="pl-pds">'</span></span>]}); </pre></div>
 
 <h3>
 <a id="suid-pool-options" class="anchor" href="#suid-pool-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Suid pool options</h3>
 
-<p>The suid script fetches suid blocks from the suid server and stores them in a pool in <a href="http://www.w3.org/TR/webstorage/#storage">localStorage</a> (<a href="http://caniuse.com/#search=localstorage">browser support</a>). This pool is accessible from all tabs that are from the same domain, maximizing the efficient use of suid blocks. </p>
+<p>The suid script fetches suid blocks from the suid server and stores them in a pool in 
+<a href="http://www.w3.org/TR/webstorage/#storage">localStorage</a> 
+(<a href="http://caniuse.com/#search=localstorage">browser support</a>). This pool is accessible from 
+all tabs that are from the same domain, maximizing the efficient use of suid blocks. </p>
 
 <p>You can control the behaviour of the pool with two settings:</p>
 
@@ -140,14 +206,75 @@
 <code>max</code>: Maximum number of suid blocks to keep in the pool, defaults to 4</li>
 </ul>
 
-<p>Option <code>min</code> determines how low the amount of blocks in the pool may become before the script will request new blocks from the server. Option <code>max</code> determines how many blocks the script will fetch during each request in order to fill the pool up again. If your application has moments in which it consumes a lot of IDs in a short timeframe, or if your application is expected to be used offline for prolonged periods, choose a <code>min</code> that ensures enough IDs will always be in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks (at the expense of more ID blocks going wasted when caches are cleared etc) choose a <code>max</code> that is a number of blocks higher then your <code>min</code>.</p>
+<p>Option <code>min</code> determines how low the amount of blocks in the pool may become before the script 
+will request new blocks from the server. Option <code>max</code> determines how many blocks the script 
+will fetch during each request in order to fill the pool up again. If your application has 
+moments in which it consumes a lot of IDs in a short timeframe, or if your application is expected 
+to be used offline for prolonged periods, choose a <code>min</code> that ensures enough IDs will always be 
+in the pool to supply those IDs. If you want to reduce the number of requests for ID blocks 
+(at the expense of more ID blocks going wasted when caches are cleared etc) choose a <code>max</code> that 
+is a number of blocks higher then your <code>min</code>.</p>
 
-<p>At most 8 blocks can be requested from the pool simultaneously so bear this in mind when configuring your pool. I would guess that the default settings are good enough for most people.</p>
+<p>At most 8 blocks can be requested from the pool simultaneously (when using <code>suid-server-java</code>) 
+so bear this in mind when configuring your pool. I would guess that the default settings are 
+good enough for most people.</p>
+
+<h2>
+<a id="suid-pool-exhausted-exceptions" class="anchor" href="#suid-pool-exhausted-exceptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Suid pool exhausted exceptions</h2>
+
+<p>I have found that you will mostly get away with generating suids whenever you need them and
+suid.js will be able to maintain the pool of suid blocks very effectively. However there is
+always the possibility of the pool being empty for some reason. So if you want to play it safe
+you should wrap calls to <code>Suid.next()</code> in a <code>try...catch</code> block as it will throw an error
+when the pool is exhausted:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">try</span> {
+    <span class="pl-k">var</span> id <span class="pl-k">=</span> Suid.<span class="pl-c1">next</span>();
+} 
+<span class="pl-k">catch</span>(e) {
+    <span class="pl-c">// deal with it somehow... Either schedule a retry or show an error etc</span>
+}</pre></div>
+
+<p>Once the pool is filled this will be a very rare occurance, but you are guaranteed
+to get it when you have an empty localstorage and load a page containing this code:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>//cdn.rawgit.com/download/suid/0.10.0/dist/suid.min.js<span class="pl-pds">"</span></span> 
+        <span class="pl-e">data-suid-server</span>=<span class="pl-s"><span class="pl-pds">"</span>suid/suid.json<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span>&gt;</pre></div>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> x <span class="pl-k">=</span> Suid.<span class="pl-c1">next</span>();</pre></div>
+
+<div class="highlight highlight-text-xml"><pre>&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>This is because suid.js was not given any seed blocks and the first ajax request to
+fill up the pool will not have returned yet. You can deal with this in three ways:</p>
+
+<ul>
+<li>By providing seed data as discussed above</li>
+<li>By ignoring this possibility (feasible if you only generate ID's after user interaction)</li>
+<li>By attaching a listener to <code>Suid.ready</code>
+</li>
+</ul>
+
+<p>If the initial period with empty pool is all you fear, you can add a listener to
+<code>Suid.ready</code> like this:</p>
+
+<div class="highlight highlight-source-js"><pre>Suid.ready(<span class="pl-k">function</span>(){
+    <span class="pl-k">var</span> x <span class="pl-k">=</span> Suid.<span class="pl-c1">next</span>(); <span class="pl-c">// this will not fail</span>
+});</pre></div>
+
+<p>Personally I am not wrapping my calls to <code>Suid.next()</code> in a <code>try...catch</code> block, but
+I like living on the edge. :)</p>
+
+<h2>
+<a id="need-a-server" class="anchor" href="#need-a-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Need a server?</h2>
+
+<p>Check out the Java EE implementation: <a href="http://download.github.io/suid-server-java/">suid-server-java</a></p>
 
 <h2>
 <a id="api-documentation" class="anchor" href="#api-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>API documentation</h2>
 
-<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.9.16/doc/ws.suid.Suid.html">Suid JS API documentation</a> 
+<p>Please refer to the <a href="https://cdn.rawgit.com/download/suid/0.10.0/doc/ws.suid.Suid.html">Suid JS API documentation</a> 
 for details on the API.</p>
 
 <h2>
@@ -182,18 +309,18 @@ built Suid.</p>
 <a id="distributed-but-coordinated" class="anchor" href="#distributed-but-coordinated" aria-hidden="true"><span class="octicon octicon-link"></span></a>Distributed but coordinated</h3>
 
 <p>Suids are coordinated by a central server. The server hands out ID blocks, each of
-which allows an ID generator to generate up to 32 IDs without any further need
+which allows an ID generator to generate up to 64 IDs without any further need
 for communication with the server. It's implementation is inspired by 
 <a href="http://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap/">the mechanism Flickr uses</a>
 for generating their IDs. Flickr however serves IDs one at a time, whereas Suid
-servers hand out IDs in blocks of 32 to minimize network overhead and facilitate
+servers hand out IDs in blocks of 64 to minimize network overhead and facilitate
 longer periods of offline usage.</p>
 
 <h3>
 <a id="short" class="anchor" href="#short" aria-hidden="true"><span class="octicon octicon-link"></span></a>Short</h3>
 
-<p>Suids fit in 53-bits, which means they can be treated as a native integer number in 
-all major programming languages, including PHP and Javascript. And because they are
+<p>Suids fit in 53-bits, which means they can be treated as a native number in all 
+major programming languages, including PHP and Javascript. And because they are
 ordered, they start out <em>very</em> short and only grow longer as time goes by and
 more and more of them are issued. They will never become longer than 11 characters.
 Here is an example of the length of the ID as more and more IDs get issued:</p>
@@ -238,26 +365,25 @@ error-prone and tedious.</p>
 <pre><code>                 HIGH INT                                         LOW INT
  _______________________________________________________________________________________________
 |                                               |                                               |
-| 0000 0000 | 000b bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | biii iiss |
+| 0000 0000 | 000b bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | bbbb bbbb | biii iiis |
 |_______________________________________________|_______________________________________________|
 
 0 = 11 reserved bits
 b = 46 block bits
-i = 5 ID bits
-s = 2 shard bits
+i = 6 ID bits
+s = 1 shard bit
 </code></pre>
 
 <p>The first 11 bits are reserved and always set to <code>0</code>. The next 46 bits are used for
-the <code>block</code> number. These are handed out by a centralized server. Then there are 5 <code>ID</code>
-bits which are to be filled in by the generator. The last 2 bits are reserved for the <code>shard</code>
-ID. To prevent a single point of failure, up to 4 individual hosts can be handing out 
-ID's for a certain domain, each with their own <code>shard</code> ID.</p>
+the <code>block</code> number. These are handed out by a centralized server. Then there are 6 <code>ID</code>
+bits which are to be filled in by the generator. The last bit is reserved for the <code>shard</code>
+ID. To prevent a single point of failure, two separate hosts can be handing out ID's for 
+a certain domain, each with their own <code>shard</code> ID (<code>0</code> or <code>1</code>).</p>
 
-<p>When encoded to JSON, suids are represented as strings with the prefix <code>'Suid:'</code>, 
-e.g.: <code>'Suid:14she'</code>. The API offers <a href="https://cdn.rawgit.com/download/suid/0.9.16/doc/ws.suid.Suid.html#toJSON">toJSON</a> and 
-<a href="https://cdn.rawgit.com/download/suid/0.9.16/doc/ws.suid.Suid.html#.Suid.fromJSON">fromJSON</a>
-methods, as well as a <a href="//cdn.rawgit.com/download/suid/0.9.16/doc/ws.suid.Suid.html#.Suid.revive">revive</a> 
-function to aid in the serialization process.</p>
+<p>When encoded to JSON, suids are represented as strings, e.g.: <code>'14she'</code>. The API offers 
+a <a href="https://cdn.rawgit.com/download/suid/0.10.0/doc/ws.suid.Suid.html#toJSON">toJSON</a> method, 
+as well as a <a href="//cdn.rawgit.com/download/suid/0.10.0/doc/ws.suid.Suid.html#.Suid.revive">revive</a> 
+function that generates a reviver for a field in an object.</p>
 
 <h2>
 <a id="copyright" class="anchor" href="#copyright" aria-hidden="true"><span class="octicon octicon-link"></span></a>Copyright</h2>
