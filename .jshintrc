@@ -1,7 +1,7 @@
 {
 	"boss": true,
 	"curly": true,
-	"eqeqeq": true,
+	"eqeqeq": false,
 	"eqnull": true,
 	"es3": true,
 	"expr": true,
@@ -19,6 +19,9 @@
 	
 	"globals": {
 		"define": false,
-		"module": false
+		"global": false,
+		"module": false,
+		"require": false,
+		"window": false
 	}
 }

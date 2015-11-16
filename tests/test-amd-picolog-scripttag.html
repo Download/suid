@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>AMD + Picolog script</title>
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css">
+	<script src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+	<script src="https://cdn.rawgit.com/download/picolog/0.6.0/dist/picolog.umd.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.18/require.js" 
+			data-main="./test-amd-picolog-scripttag.js" async></script>
+</head>
+<body>
+	<a href="index.html?log=trace">Basic Test</a> | <a href="test-amd.html">AMD Test</a> | <a href="test-amd-picolog.html?log=trace">AMD with Picolog Test</a> | <a href="test-amd-picolog-scripttag.html?log=trace">AMD with Picolog from script tag Test</a>
+	<h1>Suid as AMD module (with Picolog from script tag)</h1>
+	<a href="test-amd-picolog-scripttag.js">Test code</a>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+</body>
+</html>
+
+
