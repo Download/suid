@@ -1,5 +1,5 @@
 # ws.suid <sub><sup>v0.10.0</sup></sub>
-**Distributed Service-Unique IDs that are short and sweet.**<br/>
+**Distributed Service-Unique IDs that are short and sweet.** 
 [project website](http://download.github.io/suid/)
 
 Suids are IDs that are:
