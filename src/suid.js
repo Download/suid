@@ -1,26 +1,37 @@
-/**! 
+/**!
  * Distributed Service-Unique IDs that are short and sweet.
- * 
+ *
  * http://download.github.io/suid
- * 
+ *
  * @Author Stijn de Witt (http://StijnDeWitt.com)
- * @Copyright (c) 2015. Some rights reserved. 
- * @License CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) 
+ * @Copyright (c) 2015. Some rights reserved.
+ * @License CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
  */
 /** @namespace ws.suid */
-(function(u,m,d) {var p='picolog',l; if(this.log&&this.log.INFO){l=this.log;}
-	if(typeof define=='function'&&define.amd){define(u,['require'],function(r){return d(r.defined(p)?r(p):l);});}
-	else if(typeof exports=='object'){try{require.resolve(p);l=require(p);}catch(e){}module.exports=d(l);}
+(function(u,m,d) {var l; if(this&&this.log&&this.log.picolog){l=this.log;}
+	if(typeof exports=='object'){try{require.resolve('picolog');l=require('picolog');}catch(e){}module.exports=d(l);}
+	else if(typeof define == 'function' && define.amd){define(u, ['require'], function(r){
+		return d((r.defined && r.defined('picolog')) || (r.c && r.c.picolog) ? r('picolog') : l);
+	});}
 	else{this[m] = d(l);}
 }('suid','Suid',function(log){'use strict';
 var
 SHARDSIZE = 2,
 IDSIZE = 64,
 THROTTLE = 5000,
-POOL = 'suidpool', 
+POOL = 'suidpool',
 DETECT = 'suiddetect',
 ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz',
-localStorageSupported = (function(ls){try{ls.setItem(DETECT, DETECT);ls.removeItem(DETECT);return true;}catch(e){return false;}})(localStorage),
+localStorageSupported = (function(ls){
+	try{
+		ls.setItem(DETECT, DETECT);
+		ls.removeItem(DETECT);
+		return true;
+	}
+	catch(e){
+		return false;
+	}
+})(typeof window == 'object' && window.localStorage),
 currentBlock,
 currentId,
 readyListeners = [],
@@ -29,12 +40,12 @@ config = getConfig(win.Suid, {server:'/suid/suid.json', min:3, max:4});
 
 /**
  * Distributed Service-Unique IDs that are short and sweet.
- *  
- * <p>When called without arguments, defaults to <tt>Suid(0)</tt>.</p> 
- * 
+ *
+ * <p>When called without arguments, defaults to <tt>Suid(0)</tt>.</p>
+ *
  * <p>When called with an argument, constructs a new Suid based
  * on the given value, which may be either a:</p>
- * 
+ *
  * <ul>
  *   <li>Number</li>
  *   <li>Base-36 String</li>
@@ -42,13 +53,13 @@ config = getConfig(win.Suid, {server:'/suid/suid.json', min:3, max:4});
  * </ul>
  *
  * <p>This constructor function may be called without the <tt>new</tt> keyword.</p>
- * 
+ *
  * <p><b>Examples</b></p>
- * 
+ *
  * <big><pre>
  * // Call without arguments
  * var NOP = new Suid();
- *  
+ *
  * // call with a Number argument
  * var ZERO = new Suid(0);
  * var ONE = new Suid(1);
@@ -56,16 +67,16 @@ config = getConfig(win.Suid, {server:'/suid/suid.json', min:3, max:4});
  *
  * // New-less invocation
  * var TWO = Suid(2);
- * 
+ *
  * // call with a base-36 string argument
  * var suid1 = Suid('14she');
- * 
+ *
  * // call with another suid as argument
  * var suid2 = Suid(suid1);
  * </pre></big>
- * 
+ *
  * @param value The value for the new Suid.
- * 
+ *
  * @class Suid
  * @memberof! ws.suid
  */
@@ -81,31 +92,31 @@ var Suid = (function() {
 	Suid.prototype = Object.create(Number.prototype);
 	Suid.prototype.constructor = Suid;
 
-	/** 
+	/**
 	 * Converts this suid to a string.
-	 * 
-	 * The returned String will be in base-36 format. 
+	 *
+	 * The returned String will be in base-36 format.
 	 * For example: <tt>'14she'</tt>.
-	 * 
+	 *
 	 * @return The base-36 string.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid#
 	 */
 	Suid.prototype.toString = function Suid_toString() {
-		return this.value.toString(36); 
+		return this.value.toString(36);
 	};
 
-	/** 
+	/**
 	 * Converts this suid to a JSON string.
-	 * 
-	 * The returned String will be in base-36 format. 
+	 *
+	 * The returned String will be in base-36 format.
 	 * For example: <tt>'14she'</tt>. This method
 	 * is called by <tt>JSON.stringify</tt>.
-	 * 
+	 *
 	 * @return The JSON string.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid#
-	 * 
+	 *
 	 * @see {@link ws.suid.Suid.revive}
 	 */
 	Suid.prototype.toJSON = function Suid_toJSON() {
@@ -114,34 +125,34 @@ var Suid = (function() {
 
 	/**
 	 * Returns the underlying value of this suid.
-	 * 
+	 *
 	 * @return The underlying primitive Number value.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid#
 	 */
 	Suid.prototype.valueOf = function Suid_valueOf() {
 		return this.value;
 	};
-	
+
 	/**
 	 * Compares this suid with <tt>that</tt>.
-	 * 
-	 * @return <tt>-1</tt> when this suid is less than, 
-	 *         <tt>0</tt> when it is equal to and 
+	 *
+	 * @return <tt>-1</tt> when this suid is less than,
+	 *         <tt>0</tt> when it is equal to and
 	 *         <tt>+1</tt> when it is greater than <tt>that</tt>.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid#
 	 */
 	Suid.prototype.compare = function Suid_compare(that) {
 		that = Suid(that);
 		return this.value < that.value ? -1 : this.value > that.value ? 1 : 0;
 	};
-	
+
 	/**
 	 * Indicates whether this suid and <tt>that</tt> are equal.
-	 * 
+	 *
 	 * @return <tt>true</tt> when the values are equal, <tt>false</tt> otherwise.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid#
 	 */
 	Suid.prototype.equals = function Suid_equals(that) {
@@ -150,13 +161,13 @@ var Suid = (function() {
 
 	/**
 	 * Indicates whether the given string value looks like a valid suid.
-	 * 
-	 * If this method returns true, this only indicates that it's 
+	 *
+	 * If this method returns true, this only indicates that it's
 	 * *probably* valid. There are no guarantees.
-	 * 
+	 *
 	 * @param str The string to test.
 	 * @return <tt>true</tt> if it looks valid, <tt>false</tt> otherwise.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid
 	 */
 	Suid.looksValid = function Suid_looksValid(value) {
@@ -172,25 +183,25 @@ var Suid = (function() {
 
 	/**
 	 * Creates a reviver function to be used i.c.w. JSON.parse.
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * <big><pre>
 	 * var object = {
 	 *   id: Suid(),
 	 *   name: 'Example'
 	 * };
-	 * var obj, json = JSON.stringify(object); 
+	 * var obj, json = JSON.stringify(object);
 	 * // json === '{"id":"19b","name":"Example"}'
 	 * obj = JSON.parse(json, Suid.revive('id'));   // OR
 	 * obj = JSON.parse(json, Suid.revive(['id'])); // OR
 	 * obj = JSON.parse(json, Suid.revive(function(key,val){return key === 'id';}));
 	 * // obj.id instanceof Suid === true
 	 * </pre></big>
-	 * 
+	 *
 	 * @param prop The (array of) name(s) of properties to be revived, or an evaluator function.
 	 * @returns A reviver function
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid
 	 */
 	Suid.revive = function Suid_revive(prop) {
@@ -204,9 +215,9 @@ var Suid = (function() {
 
 	/**
 	 * Generates the next suid.
-	 * 
+	 *
 	 * @return The next new suid.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid
 	 */
 	Suid.next = function Suid_next() {
@@ -234,33 +245,33 @@ var Suid = (function() {
 
 	/**
 	 * Configures the suid generator or gets the current config.
-	 * 
+	 *
 	 * <p>This method can be used as an alternative for, or in addition to, specifying
 	 * the configuration in the <tt>data-suid-server</tt> and <tt>data-suid-options</tt>
 	 * script attributes.</p>
-	 * 
+	 *
 	 * <p><b>Examples:</b></p>
-	 * 
+	 *
 	 * <code><pre>
 	 * // Assuming no config was set yet... (defaults)
-	 * var config = Suid.config();       // config => {server:'/suid/suid.json', min:3, max:4}  
-	 * 
+	 * var config = Suid.config();       // config => {server:'/suid/suid.json', min:3, max:4}
+	 *
 	 * Suid.config({
 	 *     server: '/suid.json',
 	 *     min: 2,
 	 *     max: 6,
 	 *     seed: ['14she', '14sky']
 	 * });
-	 * 
-	 * // The seed is used to fill the pool and then discarded: 
+	 *
+	 * // The seed is used to fill the pool and then discarded:
 	 * var config = Suid.config();       // config => {server:'/suid.json', min:2, max:6}
-	 * 
-	 * // Config does a merge:  
+	 *
+	 * // Config does a merge:
 	 * config = Suid.config({max: 8});   // config => {server:'/suid.json', min:2, max:8}
-	 * </pre></code> 
-	 * 
+	 * </pre></code>
+	 *
 	 * @return The current config after the given <tt>cfg</tt> object has been processed, if any.
-	 * 
+	 *
 	 * @memberof! ws.suid.Suid
 	 */
 	Suid.config = function Suid_config(cfg) {
@@ -279,27 +290,27 @@ var Suid = (function() {
 
 	/**
 	 * Indicates if Suid is ready to generate IDs, attaches the given callback listener.
-	 * 
+	 *
 	 * <p>This method can be used to find out whether Suid is ready to generate ID's, or
 	 * to attach an event listener to the ready event. The given <tt>callback</tt> function
 	 * is guaranteed to fire asynchronously, meaning this method will always return before
 	 * the callback is fired. Due to this, this method may already return <tt>true</tt> even
 	 * though the ready event hasn't fired yet.</p>
-	 * 
+	 *
 	 * <p><b>Examples:</b></p>
-	 * 
+	 *
 	 * <code><pre>
 	 * if (Suid.ready()) {
 	 *   // Suid is ready!
 	 * } else {
 	 *   // Suid is not ready yet...
 	 * }
-	 * 
+	 *
 	 * Suid.ready(function(){
 	 *   // Suid is ready!
 	 * });
 	 * </pre></code>
-	 * 
+	 *
 	 * @param callback The optional callback function that will be called once Suid is ready.
 	 * @return <tt>true</tt> if Suid is ready, <tt>false</tt> otherwise.
 	 */
@@ -368,7 +379,7 @@ var Server = (function(){
 			case 504: // Gateway Timeout
 				retry(request);
 				break;
-			default: // unrecoverable? give up 
+			default: // unrecoverable? give up
 				log && log.error('Unable to fetch suid data from server. ', request, status);
 				retries = 0;
 		}
@@ -405,38 +416,39 @@ var Server = (function(){
 				after = 2000; // 2 sec
 			}
 		}
-		
+
 		setTimeout(function(){
 			ajax(config.server, {blocks: config.max - Pool.get().length}, handleSuccess, handleError);
 		}, after);
 	}
 
 	function ajax(url, data, success, error, sync) {
-		var xhr = new XMLHttpRequest(), query = [], params, key; 
+		var xhr = new XMLHttpRequest(), query = [], params, key;
 		for (key in data) {
 			if (data.hasOwnProperty(key)) {
 				query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
 			}
 		}
 		params = query.join('&');
-		xhr.open('get', url + (params ? (url.indexOf('?') !== -1 ? '&' : '?') + params : ''), !sync); 
-		xhr.addEventListener('readystatechange', function(){ 
-			if (this.readyState === 4) { 
+		xhr.open('get', url + (params ? (url.indexOf('?') !== -1 ? '&' : '?') + params : ''), !sync);
+		xhr.addEventListener('readystatechange', function(){
+			if (this.readyState === 4) {
 				this.status === 200 ? success(this.responseText, this) : error(this.status, this);
 			}
-		}); 
-		xhr.addEventListener('error', function () { 
-			error(this, this.status); 
-		}); 
-		xhr.send(); 
+		});
+		xhr.addEventListener('error', function () {
+			error(this, this.status);
+		});
+		xhr.send();
 	}
 
 	return {
 		fetch: function Server_fetch() {
-			if (retries && ((new Date().getTime() - started < THROTTLE) || 
+			if (typeof window != 'object') {return;} // TODO fetch on Node JS
+			if (retries && ((new Date().getTime() - started < THROTTLE) ||
 							(currentId && (currentId < (IDSIZE/2))))) {
 				return; // already fetching and still recent or not urgent
-			} 
+			}
 			var pool = Pool.get();
 			if (pool.length < config.min) {
 				retries = 3;
@@ -457,9 +469,9 @@ function merge() {
 
 function getConfig(cfg, def) {
 	var options = {},
-		config = merge(def, cfg),
-		script = document.querySelector('script[data-suid-server]');
-	if (!script) {script = document.querySelector('script[data-suid-options]');}
+		config = merge(def, cfg);
+	var script = typeof document == 'object' && document.querySelector('script[data-suid-server]');
+	if (!script) {script = typeof document == 'object' && document.querySelector('script[data-suid-options]');}
 	if (script) {
 		var attr = script.getAttribute('data-suid-options');
 		if (attr) {

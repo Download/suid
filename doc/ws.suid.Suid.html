@@ -83,7 +83,7 @@
     
     <div class="description">
         <p>Distributed Service-Unique IDs that are short and sweet.</p>
-<p>When called without arguments, defaults to <tt>Suid(0)</tt>.</p> 
+<p>When called without arguments, defaults to <tt>Suid(0)</tt>.</p>
 
 <p>When called with an argument, constructs a new Suid based
 on the given value, which may be either a:</p>
@@ -206,7 +206,7 @@ var suid2 = Suid(suid1);
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-30">line 30</a>
+				 <a href="suid.js.html#sunlight-1-line-41">line 41</a>
 			</li>
 		</ul>
 	</dd>
@@ -273,16 +273,17 @@ script attributes.</p>
 
 <p><code><pre>
 // Assuming no config was set yet... (defaults)
-var config = Suid.config();       // config =&gt; {server:'/suid/suid.json', min:3, max:4}  </p>
+var config = Suid.config();       // config =&gt; {server:'/suid/suid.json', min:3, max:4}</p>
 <p>Suid.config({
     server: '/suid.json',
     min: 2,
     max: 6,
     seed: ['14she', '14sky']
 });</p>
-<p>// The seed is used to fill the pool and then discarded: 
+<p>// The seed is used to fill the pool and then discarded:
 var config = Suid.config();       // config =&gt; {server:'/suid.json', min:2, max:6}</p>
-<p>// Config does a merge:<br>config = Suid.config({max: 8});   // config =&gt; {server:'/suid.json', min:2, max:8}
+<p>// Config does a merge:
+config = Suid.config({max: 8});   // config =&gt; {server:'/suid.json', min:2, max:8}
 </pre></code></p>
     </div>
     
@@ -330,7 +331,7 @@ var config = Suid.config();       // config =&gt; {server:'/suid.json', min:2, m
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-266">line 266</a>
+				 <a href="suid.js.html#sunlight-1-line-277">line 277</a>
 			</li>
 		</ul>
 	</dd>
@@ -382,7 +383,7 @@ var config = Suid.config();       // config =&gt; {server:'/suid.json', min:2, m
     
     <div class="description">
         <p>Indicates whether the given string value looks like a valid suid.</p>
-<p>If this method returns true, this only indicates that it's 
+<p>If this method returns true, this only indicates that it's
 <em>probably</em> valid. There are no guarantees.</p>
     </div>
     
@@ -474,7 +475,7 @@ var config = Suid.config();       // config =&gt; {server:'/suid.json', min:2, m
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-162">line 162</a>
+				 <a href="suid.js.html#sunlight-1-line-173">line 173</a>
 			</li>
 		</ul>
 	</dd>
@@ -572,7 +573,7 @@ var config = Suid.config();       // config =&gt; {server:'/suid.json', min:2, m
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-212">line 212</a>
+				 <a href="suid.js.html#sunlight-1-line-223">line 223</a>
 			</li>
 		</ul>
 	</dd>
@@ -630,7 +631,7 @@ var object = {
   id: Suid(),
   name: 'Example'
 };
-var obj, json = JSON.stringify(object); 
+var obj, json = JSON.stringify(object);
 // json === '{&quot;id&quot;:&quot;19b&quot;,&quot;name&quot;:&quot;Example&quot;}'
 obj = JSON.parse(json, Suid.revive('id'));   // OR
 obj = JSON.parse(json, Suid.revive(['id'])); // OR
@@ -727,7 +728,7 @@ obj = JSON.parse(json, Suid.revive(function(key,val){return key === 'id';}));
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-196">line 196</a>
+				 <a href="suid.js.html#sunlight-1-line-207">line 207</a>
 			</li>
 		</ul>
 	</dd>
@@ -825,7 +826,7 @@ obj = JSON.parse(json, Suid.revive(function(key,val){return key === 'id';}));
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-135">line 135</a>
+				 <a href="suid.js.html#sunlight-1-line-146">line 146</a>
 			</li>
 		</ul>
 	</dd>
@@ -854,8 +855,8 @@ obj = JSON.parse(json, Suid.revive(function(key,val){return key === 'id';}));
     
             
 <div class="param-desc">
-    <p><tt>-1</tt> when this suid is less than, 
-        <tt>0</tt> when it is equal to and 
+    <p><tt>-1</tt> when this suid is less than,
+        <tt>0</tt> when it is equal to and
         <tt>+1</tt> when it is greater than <tt>that</tt>.</p>
 </div>
 
@@ -925,7 +926,7 @@ obj = JSON.parse(json, Suid.revive(function(key,val){return key === 'id';}));
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-147">line 147</a>
+				 <a href="suid.js.html#sunlight-1-line-158">line 158</a>
 			</li>
 		</ul>
 	</dd>
@@ -977,7 +978,7 @@ obj = JSON.parse(json, Suid.revive(function(key,val){return key === 'id';}));
     
     <div class="description">
         <p>Converts this suid to a JSON string.</p>
-<p>The returned String will be in base-36 format. 
+<p>The returned String will be in base-36 format.
 For example: <tt>'14she'</tt>. This method
 is called by <tt>JSON.stringify</tt>.</p>
     </div>
@@ -1026,7 +1027,7 @@ is called by <tt>JSON.stringify</tt>.</p>
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-111">line 111</a>
+				 <a href="suid.js.html#sunlight-1-line-122">line 122</a>
 			</li>
 		</ul>
 	</dd>
@@ -1085,7 +1086,7 @@ is called by <tt>JSON.stringify</tt>.</p>
     
     <div class="description">
         <p>Converts this suid to a string.</p>
-<p>The returned String will be in base-36 format. 
+<p>The returned String will be in base-36 format.
 For example: <tt>'14she'</tt>.</p>
     </div>
     
@@ -1133,7 +1134,7 @@ For example: <tt>'14she'</tt>.</p>
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-94">line 94</a>
+				 <a href="suid.js.html#sunlight-1-line-105">line 105</a>
 			</li>
 		</ul>
 	</dd>
@@ -1231,7 +1232,7 @@ For example: <tt>'14she'</tt>.</p>
 		<ul class="dummy">
 			<li>
 				<a href="suid.js.html">suid.js</a>,
-				 <a href="suid.js.html#sunlight-1-line-122">line 122</a>
+				 <a href="suid.js.html#sunlight-1-line-133">line 133</a>
 			</li>
 		</ul>
 	</dd>
@@ -1309,7 +1310,7 @@ For example: <tt>'14she'</tt>.</p>
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a>
-	on Mon Nov 16th 2015 using the <a
+	on Mon Mar 7th 2016 using the <a
 	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 </span>
 </footer>

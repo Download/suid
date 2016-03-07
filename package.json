@@ -1,6 +1,6 @@
 {
   "name": "ws.suid",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Distributed Service-Unique IDs that are short and sweet.",
   "main": "src/suid.js",
   "dist": {
