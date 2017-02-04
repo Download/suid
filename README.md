@@ -1,4 +1,6 @@
 # ws.suid <sub><sup>v0.10.1</sup></sub>
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Download/suid.svg)](https://greenkeeper.io/)
 **Distributed Service-Unique IDs that are short and sweet.**
 [project website](http://download.github.io/suid/)
 
